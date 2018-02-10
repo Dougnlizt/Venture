@@ -7,6 +7,7 @@ package org.tjcs.venture;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.tjcs.venture.Utilities.Grade;
 import org.tjcs.venture.Utilities.Tier;
 
@@ -24,8 +25,10 @@ public class ProspectiveStudent {
     private Tier tier;
     private String familyKey;
     private Grade grade;
+    private XSSFRow rowFromSpreadsheet;
 
-    public ProspectiveStudent(String lastName, String firstName, Tier tier, String familyKey, Grade grade) {
+    public ProspectiveStudent(XSSFRow row, String lastName, String firstName, Tier tier, String familyKey, Grade grade) {
+        this.rowFromSpreadsheet = row;
         this.lastName = lastName;
         this.firstName = firstName;
         this.tier = tier;
@@ -33,6 +36,10 @@ public class ProspectiveStudent {
         this.grade = grade;
     }
 
+    public XSSFRow getRowFromSpreadsheet() {
+        return rowFromSpreadsheet;
+    }
+    
     public String getLastName() {
         return lastName;
     }

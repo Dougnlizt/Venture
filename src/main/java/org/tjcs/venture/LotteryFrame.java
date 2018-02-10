@@ -6,10 +6,13 @@
 package org.tjcs.venture;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,9 +61,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jTextFieldDestination = new javax.swing.JTextField();
         jButtonBrowseForMasterFile = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButtonImport = new javax.swing.JButton();
+        jButtonExport = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelSelectAllGrades = new javax.swing.JLabel();
+        jLabelClearAllGrades = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -127,6 +132,15 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
         jLabel2.setText("Output");
 
+        jButtonImport.setText("Import");
+        jButtonImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImportActionPerformed(evt);
+            }
+        });
+
+        jButtonExport.setText("Export");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -137,15 +151,17 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldDestination, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                    .addComponent(jTextFieldMasterFileSource))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldMasterFileSource)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBrowseForMasterFile))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldDestination)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBrowseForDestination)))
+                    .addComponent(jButtonBrowseForMasterFile)
+                    .addComponent(jButtonBrowseForDestination))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -155,20 +171,44 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldMasterFileSource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBrowseForMasterFile))
+                    .addComponent(jButtonBrowseForMasterFile)
+                    .addComponent(jButtonImport))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBrowseForDestination)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jButtonExport))
                 .addContainerGap())
         );
 
         jPanel2.setSize(new java.awt.Dimension(100, 10));
 
-        jLabel3.setText("Select All");
+        jLabelSelectAllGrades.setText("Select All");
+        jLabelSelectAllGrades.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelSelectAllGradesMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabelSelectAllGradesMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabelSelectAllGradesMouseEntered(evt);
+            }
+        });
 
-        jLabel4.setText("Clear All");
+        jLabelClearAllGrades.setText("Clear All");
+        jLabelClearAllGrades.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelClearAllGradesMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabelClearAllGradesMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabelClearAllGradesMouseEntered(evt);
+            }
+        });
 
         jLabel6.setText("Grade");
 
@@ -229,38 +269,83 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jTextField12th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField12th.setText("0");
         jTextField12th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField12th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField11th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField11th.setText("0");
         jTextField11th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField11th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField10th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField10th.setText("0");
         jTextField10th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField10th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField9th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField9th.setText("0");
         jTextField9th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField9th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField8th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField8th.setText("0");
         jTextField8th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField8th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField7th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField7th.setText("0");
         jTextField7th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField7th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField6th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField6th.setText("0");
         jTextField6th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField6th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField5th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField5th.setText("0");
         jTextField5th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField5th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField4th.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField4th.setText("0");
         jTextField4th.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField4th.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jCheckBox10th.setSelected(true);
         jCheckBox10th.addActionListener(new java.awt.event.ActionListener() {
@@ -314,18 +399,38 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jTextField3rd.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField3rd.setText("0");
         jTextField3rd.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField3rd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField2nd.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField2nd.setText("0");
         jTextField2nd.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField2nd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextField1st.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1st.setText("0");
         jTextField1st.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextField1st.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jTextFieldKinder.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextFieldKinder.setText("0");
         jTextFieldKinder.setPreferredSize(new java.awt.Dimension(5, 28));
+        jTextFieldKinder.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAvailableSeatsFocusLost(evt);
+            }
+        });
 
         jCheckBox3rd.setSelected(true);
         jCheckBox3rd.addActionListener(new java.awt.event.ActionListener() {
@@ -372,27 +477,27 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jCheckBox11th)
                     .addComponent(jTextField11th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jCheckBox10th)
                     .addComponent(jTextField10th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                     .addComponent(jCheckBox9th)
                     .addComponent(jTextField9th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                     .addComponent(jCheckBox8th)
                     .addComponent(jTextField8th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jCheckBox7th)
                     .addComponent(jTextField7th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -430,7 +535,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jTextFieldKinder, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBoxKinder)
                     .addComponent(jLabel18))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -469,21 +574,22 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             .addComponent(jCheckBox1st, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBoxKinder, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField11th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField10th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField9th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField8th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3rd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2nd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1st, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldKinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField6th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField6th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField11th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField10th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField9th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField8th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField7th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField5th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField4th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField3rd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField2nd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField1st, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextFieldKinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jCheckBox11th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -518,9 +624,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(jLabelSelectAllGrades)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
+                        .addComponent(jLabelClearAllGrades)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPaneProspectiveStudents)
@@ -539,8 +645,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabelSelectAllGrades)
+                    .addComponent(jLabelClearAllGrades))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -602,6 +708,40 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         selectSourceFile();
     }//GEN-LAST:event_jButtonBrowseForMasterFileActionPerformed
 
+    private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
+        loadSpreadsheet();
+    }//GEN-LAST:event_jButtonImportActionPerformed
+
+    private void jLabelSelectAllGradesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSelectAllGradesMouseEntered
+        jLabelSelectAllGrades.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabelSelectAllGradesMouseEntered
+
+    private void jLabelSelectAllGradesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSelectAllGradesMouseExited
+        jLabelSelectAllGrades.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabelSelectAllGradesMouseExited
+
+    private void jLabelSelectAllGradesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSelectAllGradesMouseClicked
+        for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
+            JCheckBox value = entry.getValue();
+            value.setSelected(true);
+        }
+    }//GEN-LAST:event_jLabelSelectAllGradesMouseClicked
+
+    private void jLabelClearAllGradesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearAllGradesMouseEntered
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabelClearAllGradesMouseEntered
+
+    private void jLabelClearAllGradesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearAllGradesMouseExited
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabelClearAllGradesMouseExited
+
+    private void jLabelClearAllGradesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearAllGradesMouseClicked
+        for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
+            JCheckBox value = entry.getValue();
+            value.setSelected(false);
+        }
+    }//GEN-LAST:event_jLabelClearAllGradesMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -640,6 +780,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBrowseForDestination;
     private javax.swing.JButton jButtonBrowseForMasterFile;
+    private javax.swing.JButton jButtonExport;
+    private javax.swing.JButton jButtonImport;
     private javax.swing.JButton jButtonStartLottery;
     private javax.swing.JCheckBox jCheckBox10th;
     private javax.swing.JCheckBox jCheckBox11th;
@@ -669,14 +811,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelClearAllGrades;
     private javax.swing.JLabel jLabelNumRecords;
+    private javax.swing.JLabel jLabelSelectAllGrades;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
@@ -700,9 +842,16 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTextField jTextFieldMasterFileSource;
     // End of variables declaration//GEN-END:variables
 
+    private final String homeDir = System.getProperty("user.home");
+    private final String appName = "Venture";
+    private final String toolSettingsFileName = "ventureSettings.txt";
+    private final static String SOURCE_LOCATION_DESC = "Source Location";
+    private final static String DESTINATION_LOCATION_DESC = "Destination Location";
+    private final static String GRADES_CHECKED = "Grades Checked";
+    private final static String GRADES_OPEN_SEATS = "Grades Open Seats";
     private List<DB_RecordCell> dbRecordCellList;
     private List<Lottery> lotteryList;
-    private Map<Grade, Lottery> gradeLotteryMap;
+    private Map<Grade, Lottery> gradeLotteryMap = new HashMap<>();
     private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
     private Map<Grade, JCheckBox> gradeCheckBoxesMap;
     private Map<Grade, JTextField> gradeAvailableSeatsMap;
@@ -740,19 +889,24 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         gradeAvailableSeatsMap.put(Grade.SECOND, jTextField2nd);
         gradeAvailableSeatsMap.put(Grade.FIRST, jTextField1st);
         gradeAvailableSeatsMap.put(Grade.KINDER, jTextFieldKinder);
+        
+        loadSettings();
     }
     
     private void selectSourceFile() {
         Path sourceFile = Utilities.selectFile(this, jTextFieldMasterFileSource.getText());
         if (sourceFile != null) {
             jTextFieldMasterFileSource.setText(sourceFile.toString());
-            loadSpreadsheet();
+            saveSettings();
         }
     }
     
     private void loadSpreadsheet() {
         //getSpreadsheetData();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         gradeLotteryMap = new HashMap<>();
+        List<XSSFRow> validRows = new ArrayList<>();
+        List<XSSFRow> problemRows = new ArrayList<>();
         
         //addToLottery(new ProspectiveStudent("Doe", "John", Tier.CHILDREN_OF_EMPLOYEES_1, "Doe1", Grade.NINTH));
         //addToLottery(new ProspectiveStudent("Dole", "Bill", Tier.SIBLINGS_IN_DISTRICT_2, "Dole1", Grade.TWELFTH));
@@ -782,62 +936,37 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     }
 
                     System.out.println("\nROW " + row.getRowNum() + " has " + row.getPhysicalNumberOfCells() + " cell(s).");
-                    if (row.getCell(colValues[2]) != null
-                            && row.getCell(colValues[3]) != null
-                            && row.getCell(colValues[2]).getCellTypeEnum() == CellType.NUMERIC
-                            && row.getCell(colValues[3]).getCellTypeEnum() == CellType.NUMERIC) {
-                        addToLottery(new ProspectiveStudent(row.getCell(colValues[0]).getStringCellValue(),
+                    //If the tier and grade are both null, then skip this line
+                    XSSFCell tierRow = row.getCell(colValues[2]);
+                    XSSFCell gradeRow = row.getCell(colValues[3]);
+                    boolean tierRowIsNumeric = false;
+                    boolean gradeRowIsNumeric = false;
+                    if (tierRow == null && gradeRow == null) {
+                        continue;
+                    }
+                    if (tierRow != null) tierRowIsNumeric = tierRow.getCellTypeEnum() == CellType.NUMERIC;
+                    if (gradeRow != null) gradeRowIsNumeric = gradeRow.getCellTypeEnum() == CellType.NUMERIC;
+                    if (tierRowIsNumeric && gradeRowIsNumeric) {
+                        validRows.add(row);
+                    } else {
+                        problemRows.add(row);
+                    }
+                }
+                for (XSSFRow row : validRows) {
+                    addToLottery(new ProspectiveStudent(row, row.getCell(colValues[0]).getStringCellValue(),
                                 row.getCell(colValues[1]).getStringCellValue(),
                                 Tier.getTier((int) row.getCell(colValues[2]).getNumericCellValue()),
                                 row.getCell(colValues[0]).getStringCellValue(),
                                 Grade.getGrade((int) row.getCell(colValues[3]).getNumericCellValue())));
-                    }
-                    if (true == true) continue;
-                    for (int c = 0; c < row.getLastCellNum(); c++) {
-                        XSSFCell cell = row.getCell(c);
-                        String value;
-
-                        if (cell != null) {
-                            switch (cell.getCellTypeEnum()) {
-
-                                case FORMULA:
-                                    value = "FORMULA value=" + cell.getCellFormula();
-                                    break;
-
-                                case NUMERIC:
-                                    value = "NUMERIC value=" + cell.getNumericCellValue();
-                                    break;
-
-                                case STRING:
-                                    value = "STRING value=" + cell.getStringCellValue();
-                                    break;
-
-                                case BLANK:
-                                    value = "<BLANK>";
-                                    break;
-
-                                case BOOLEAN:
-                                    value = "BOOLEAN value-" + cell.getBooleanCellValue();
-                                    break;
-
-                                case ERROR:
-                                    value = "ERROR value=" + cell.getErrorCellValue();
-                                    break;
-
-                                default:
-                                    value = "UNKNOWN value of type " + cell.getCellType();
-                            }
-                            System.out.println("CELL col=" + cell.getColumnIndex() + " VALUE="
-                                            + value);
-                        }
-                    }
                 }
             }
             rePopulateProspectiveStudents();
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(this, "Problem loading the file:  " + ex.getMessage(), 
+                    "Issue Loading Master File", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
     
     private boolean isGradeChecked(Grade grade) {
@@ -845,12 +974,18 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         return tempCheckBox.isSelected();
     }
     
-    private void jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void jCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {            
+        saveSettings();
         rePopulateProspectiveStudents();
     } 
     
+    private void jTextFieldAvailableSeatsFocusLost(java.awt.event.FocusEvent evt) {
+        saveSettings();
+    }
+    
     private void rePopulateProspectiveStudents() {
         //Need to know how many columns to show...
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
         Object[][] tableItems = new Object[1][7];
@@ -915,8 +1050,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         prospectiveStudentsTable.initTable();
         prospectiveStudentsTable.addActionListener(this);
         jScrollPaneProspectiveStudents.setViewportView(prospectiveStudentsTable);
-        pack();
+        //pack();
         updateDB_Search();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     private void addToLottery(ProspectiveStudent ps) {
@@ -987,6 +1123,114 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
         return null;
     }
+    
+    private void loadSettings() {
+        //file format is Field Name~value
+            //For multiple values, it is Field Name~value1,value2,value3
+            //For multiple values with pairs, it is Field Name~key1:value1,key2:value2,key3:value3
+        try {
+            ArrayList<String> settingsList = FileUtilities.readLinesFromFile(Paths.get(homeDir, appName, toolSettingsFileName));
+            
+            String temp;
+            String[] gradeInfo;
+            for (String pref : settingsList) {
+                String[] setting = pref.split("~");
+                if (setting.length < 2) continue;
+                temp = setting[1];
+                if (null != setting[0]) switch (setting[0]) {
+                    case SOURCE_LOCATION_DESC:
+                        jTextFieldMasterFileSource.setText(temp);
+                        break;
+                    case DESTINATION_LOCATION_DESC:
+                        jTextFieldDestination.setText(temp);
+                    //    break;
+                    case GRADES_CHECKED:
+                        //Format is grade #:boolean like 12:false, 11:true, and so on...
+                        gradeInfo = temp.trim().split(",");
+                        for (String gradeBoolean : gradeInfo) {
+                            String[] gradeDetail = gradeBoolean.trim().split(":");
+                            if (gradeDetail.length < 2) {
+                                continue;
+                            }
+                            try {
+                                String gradeNumStr = gradeDetail[0].trim();
+                                boolean selected = Boolean.valueOf((String) gradeDetail[1].trim());
+                                Grade savedGrade = Grade.getGrade(gradeNumStr);
+                                if (savedGrade != Grade.UNKNOWN) {
+                                    gradeCheckBoxesMap.get(savedGrade).setSelected(selected);
+                                }
+                            } catch (Exception ex) {
+                                continue;
+                            }
+                        }
+                        break;
+                    case GRADES_OPEN_SEATS:
+                        //Format is grade #:boolean like 12:false, 11:true, and so on...
+                        gradeInfo = temp.trim().split(",");
+                        for (String gradeSeats : gradeInfo) {
+                            String[] gradeDetail = gradeSeats.trim().split(":");
+                            if (gradeDetail.length < 2) {
+                                continue;
+                            }
+                            try {
+                                String gradeNumStr = gradeDetail[0].trim();
+                                String numSeatsStr = gradeDetail[1].trim();
+                                Grade savedGrade = Grade.getGrade(gradeNumStr);
+                                if (savedGrade != Grade.UNKNOWN) {
+                                    gradeAvailableSeatsMap.get(savedGrade).setText(numSeatsStr);
+                                }
+                            } catch (Exception ex) {
+                                continue;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (Exception ex) {
+            
+        }
+    }
+    
+    private void saveSettings() {
+        StringBuffer stringToWrite = new StringBuffer("");
+        stringToWrite.append(SOURCE_LOCATION_DESC).append("~").append(jTextFieldMasterFileSource.getText()).append("\n");
+        stringToWrite.append(DESTINATION_LOCATION_DESC).append("~").append(jTextFieldDestination.getText()).append("\n");
+        stringToWrite.append(GRADES_CHECKED).append("~");
+        for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
+            Grade key = entry.getKey();
+            JCheckBox value = entry.getValue();
+            stringToWrite.append(String.valueOf(key.getNumber())).append(":").append(value.isSelected()).append(",");
+        }
+        stringToWrite.append("\n");
+        
+        stringToWrite.append(GRADES_OPEN_SEATS).append("~");
+        for (Map.Entry<Grade, JTextField> entry : gradeAvailableSeatsMap.entrySet()) {
+            Grade key = entry.getKey();
+            JTextField value = entry.getValue();
+            //If it's not numeric, skip it
+            try {
+                Integer.parseInt(value.getText().trim());
+                stringToWrite.append(String.valueOf(key.getNumber())).append(":").append(value.getText()).append(",");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The value '" + value.getText().trim() + "' for the " + key.getGradeDescription() + " grade should be a whole number.", 
+                    "Issue Saving Value", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        stringToWrite.append("\n");
+
+        Path fileDest = Paths.get(homeDir, appName, toolSettingsFileName);
+        try {
+            FileUtilities.writeStringToFile(fileDest, stringToWrite, false);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Problem saving settings:  " + ex.getMessage(), 
+                    "Issue Saving Settings", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+    
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -71,17 +71,19 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jTextFieldDestination" pref="655" max="32767" attributes="0"/>
+                      <Component id="jTextFieldMasterFileSource" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTextFieldMasterFileSource" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButtonBrowseForMasterFile" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTextFieldDestination" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButtonBrowseForDestination" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jButtonBrowseForMasterFile" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonBrowseForDestination" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jButtonExport" max="32767" attributes="0"/>
+                      <Component id="jButtonImport" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -95,12 +97,14 @@
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldMasterFileSource" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonBrowseForMasterFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonImport" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jTextFieldDestination" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonBrowseForDestination" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonExport" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -135,6 +139,19 @@
             <Property name="text" type="java.lang.String" value="Output"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="jButtonImport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Import"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonImportActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonExport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Export"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
@@ -151,9 +168,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelSelectAllGrades" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelClearAllGrades" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
@@ -177,8 +194,8 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelSelectAllGrades" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelClearAllGrades" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" pref="81" max="-2" attributes="0"/>
@@ -197,15 +214,25 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="jLabelSelectAllGrades">
           <Properties>
             <Property name="text" type="java.lang.String" value="Select All"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelSelectAllGradesMouseClicked"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelSelectAllGradesMouseExited"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelSelectAllGradesMouseEntered"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="jLabelClearAllGrades">
           <Properties>
             <Property name="text" type="java.lang.String" value="Clear All"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelClearAllGradesMouseClicked"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelClearAllGradesMouseExited"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelClearAllGradesMouseEntered"/>
+          </Events>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel4">
 
@@ -227,31 +254,31 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel5" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel5" alignment="2" pref="50" max="32767" attributes="0"/>
                           <Component id="jCheckBox11th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField11th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel8" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel8" alignment="2" pref="50" max="32767" attributes="0"/>
                           <Component id="jCheckBox10th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField10th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel9" alignment="2" pref="44" max="32767" attributes="0"/>
+                          <Component id="jLabel9" alignment="2" pref="34" max="32767" attributes="0"/>
                           <Component id="jCheckBox9th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField9th" alignment="2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel10" alignment="2" pref="44" max="32767" attributes="0"/>
+                          <Component id="jLabel10" alignment="2" pref="34" max="32767" attributes="0"/>
                           <Component id="jCheckBox8th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField8th" alignment="2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel11" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel11" alignment="2" pref="50" max="32767" attributes="0"/>
                           <Component id="jCheckBox7th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField7th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
@@ -297,7 +324,7 @@
                           <Component id="jCheckBoxKinder" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel18" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -340,21 +367,23 @@
                                   <Component id="jCheckBoxKinder" min="-2" pref="19" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel20" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
-                                  <Component id="jTextField12th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField11th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField10th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField9th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField8th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField7th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField5th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField4th" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField3rd" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField2nd" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField1st" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldKinder" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jTextField6th" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel20" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
+                                      <Component id="jTextField12th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField11th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField10th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField9th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField8th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField7th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField5th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField4th" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField3rd" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField2nd" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField1st" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldKinder" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <Component id="jCheckBox11th" min="-2" pref="19" max="-2" attributes="0"/>
@@ -479,6 +508,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField12th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField11th">
               <Properties>
@@ -488,6 +520,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField11th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField10th">
               <Properties>
@@ -497,6 +532,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField10th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField9th">
               <Properties>
@@ -506,6 +544,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField9th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField8th">
               <Properties>
@@ -515,6 +556,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField8th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField7th">
               <Properties>
@@ -524,6 +568,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField7th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField6th">
               <Properties>
@@ -533,6 +580,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField6th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField5th">
               <Properties>
@@ -542,6 +592,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField5th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField4th">
               <Properties>
@@ -551,6 +604,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField4th.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox10th">
               <Properties>
@@ -616,6 +672,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField3rd.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField2nd">
               <Properties>
@@ -625,6 +684,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField2nd.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField1st">
               <Properties>
@@ -634,6 +696,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextField1st.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldKinder">
               <Properties>
@@ -643,6 +708,9 @@
                   <Dimension value="[5, 28]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jTextFieldKinder.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;        jTextFieldAvailableSeatsFocusLost(evt);&#xa;    }&#xa;});"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox3rd">
               <Properties>

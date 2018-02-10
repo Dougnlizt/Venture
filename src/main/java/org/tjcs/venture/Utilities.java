@@ -93,6 +93,14 @@ public class Utilities {
             }
             return UNKNOWN;
         }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public String getGradeDescription() {
+            return gradeDescription;
+        }
         
         public static Grade getGrade(String gradeNumber) {
             if (gradeNumber == null || gradeNumber.trim().isEmpty()) return UNKNOWN;
