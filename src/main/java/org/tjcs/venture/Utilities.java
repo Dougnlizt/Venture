@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -121,6 +122,86 @@ public class Utilities {
         }
     }
     
+    public enum Columns {
+        LOTTERY_DRAW(0, "Lottery Draw", null, false),
+        LAST_NAME(1, "Last Name", "C", true),
+        FIRST_NAME(2, "First Name", "D", true),
+        TIER(3, "Tier", "E", true),
+        GRADE(4, "Grade", "?", true),
+        FAMILY_KEY(5, "Family Key", null, false),
+        WAIT_LIST_SIBLINGS(6, "Wait List Siblings", null, false),
+        ;
+        private int order;
+        private String columnName;
+        private String spreadsheetColumn;
+        private boolean fromSpreadsheet;
+
+        private Columns(int order, String columnName, String spreadsheetColumn, boolean fromSpreadsheet) {
+            this.order = order;
+            this.columnName = columnName;
+            this.spreadsheetColumn = spreadsheetColumn;
+            this.fromSpreadsheet = fromSpreadsheet;
+        }
+
+        public int getOrder() {
+            return order;
+        }
+
+        public String getColumnName() {
+            return columnName;
+        }
+
+        public String getSpreadsheetColumn() {
+            return spreadsheetColumn;
+        }
+
+        public void setSpreadsheetColumn(String spreadsheetColumn) {
+            this.spreadsheetColumn = spreadsheetColumn;
+        }        
+
+        public boolean isFromSpreadsheet() {
+            return fromSpreadsheet;
+        }
+        
+        public static Columns getColumn(int colNum) {
+            for (Columns value : Columns.values()) {
+                if (value.order == colNum) {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+        public static Columns getColumn(String colNum) {
+            if (colNum == null || colNum.trim().isEmpty()) return null;
+            int colNumber = -1;
+            try {
+                colNumber = Integer.parseInt(colNum.trim());
+            } catch (Exception ex) {
+                return null;
+            }
+            return getColumn(colNumber);
+        }
+        
+        public static String[] getColumnHeaders() {
+            String[] colHeaders = new String[Columns.values().length];
+            int i = 0;
+            for (Columns value : Columns.values()) {
+                colHeaders[i ++] = value.columnName;
+            }
+            return colHeaders;
+        }
+        
+        public static int getColumnIndex(Columns col) {
+            int colIndex = -1;
+            if (col.spreadsheetColumn != null) {
+                List<String> charArray = getSpreadsheetColumnLetters();
+                colIndex = charArray.indexOf(col.spreadsheetColumn);
+            }
+            return colIndex;
+        }
+    }
+    
     public static Path selectFile(Component parent, String fileName) {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -147,5 +228,22 @@ public class Utilities {
         return newPath;
         
     }
-
+    
+    public static List<String> getSpreadsheetColumnLetters() {
+        int asciA_StartsAt = 65;
+        List<String> charactersArray = new ArrayList<>();
+        for (int i = 0; i < 26; i ++) {
+            String character = String.valueOf((char) (asciA_StartsAt + i));
+            charactersArray.add(character);
+        }
+        for (int i = 0; i < 26; i ++) {
+            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
+            for (int j = 0; j < 26; j ++) {
+                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
+                charactersArray.add(firstCharacter + secondCharacter);
+            }
+        }
+        return charactersArray;
+    }
+    
 }

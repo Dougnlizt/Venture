@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.tjcs.venture.Utilities.Columns;
 import org.tjcs.venture.Utilities.Grade;
 import org.tjcs.venture.Utilities.Tier;
 
@@ -608,6 +609,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jScrollPaneProspectiveStudents.setViewportView(jTablePropsectiveStudents);
 
         jTextFieldFilterStudents.setToolTipText("");
+        jTextFieldFilterStudents.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldFilterStudentsKeyPressed(evt);
+            }
+        });
 
         jLabel21.setText("Search Prospective Students:");
 
@@ -742,6 +748,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }//GEN-LAST:event_jLabelClearAllGradesMouseClicked
 
+    private void jTextFieldFilterStudentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFilterStudentsKeyPressed
+        updateDB_Search();
+    }//GEN-LAST:event_jTextFieldFilterStudentsKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -846,13 +856,15 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final String appName = "Venture";
     private final String toolSettingsFileName = "ventureSettings.txt";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
+    private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
     private final static String GRADES_CHECKED = "Grades Checked";
     private final static String GRADES_OPEN_SEATS = "Grades Open Seats";
+    private final static String SPREADSHEET_COLUMNS = "Spreadsheet Columns";
     private List<DB_RecordCell> dbRecordCellList;
     private List<Lottery> lotteryList;
     private Map<Grade, Lottery> gradeLotteryMap = new HashMap<>();
-    private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
+    //private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
     private Map<Grade, JCheckBox> gradeCheckBoxesMap;
     private Map<Grade, JTextField> gradeAvailableSeatsMap;
     
@@ -908,15 +920,23 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         List<XSSFRow> validRows = new ArrayList<>();
         List<XSSFRow> problemRows = new ArrayList<>();
         
-        //addToLottery(new ProspectiveStudent("Doe", "John", Tier.CHILDREN_OF_EMPLOYEES_1, "Doe1", Grade.NINTH));
-        //addToLottery(new ProspectiveStudent("Dole", "Bill", Tier.SIBLINGS_IN_DISTRICT_2, "Dole1", Grade.TWELFTH));
-        //addToLottery(new ProspectiveStudent("Smith", "Jane", Tier.DISTRICT_RESIDENTS_5, "Smith1", Grade.ELEVENTH));
-        //addToLottery(new ProspectiveStudent("Andrews", "Sue", Tier.NEARBY_COUNTY_RESIDENTS_6, "Andrews1", Grade.TENTH));
-        
         String filename = jTextFieldMasterFileSource.getText();
         
-        //last name, first name, tier, grade
-        int[] colValues = new int[]{2,3,4,22};
+        if (filename == null
+                || filename.isEmpty()
+                || !Paths.get(filename).toFile().exists()) {
+            JOptionPane.showMessageDialog(this, "The source filename is either invalid or does not exist", "Invalid file", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        SpreadsheetImport importSettings = new SpreadsheetImport(this, true);
+        importSettings.setVisible(true);
+        
+        int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
+        int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
+        int tierColIndex = Columns.getColumnIndex(Columns.TIER);
+        int gradeColIndex = Columns.getColumnIndex(Columns.GRADE);
+        int familyKeyColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
         
         try (FileInputStream fis = new FileInputStream(filename)) {
             XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -937,27 +957,27 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
                     System.out.println("\nROW " + row.getRowNum() + " has " + row.getPhysicalNumberOfCells() + " cell(s).");
                     //If the tier and grade are both null, then skip this line
-                    XSSFCell tierRow = row.getCell(colValues[2]);
-                    XSSFCell gradeRow = row.getCell(colValues[3]);
-                    boolean tierRowIsNumeric = false;
-                    boolean gradeRowIsNumeric = false;
-                    if (tierRow == null && gradeRow == null) {
+                    XSSFCell tierCol = row.getCell(tierColIndex);
+                    XSSFCell gradeCol = row.getCell(gradeColIndex);
+                    boolean tierColIsNumeric = false;
+                    boolean gradeColIsNumeric = false;
+                    if (tierCol == null && gradeCol == null) {
                         continue;
                     }
-                    if (tierRow != null) tierRowIsNumeric = tierRow.getCellTypeEnum() == CellType.NUMERIC;
-                    if (gradeRow != null) gradeRowIsNumeric = gradeRow.getCellTypeEnum() == CellType.NUMERIC;
-                    if (tierRowIsNumeric && gradeRowIsNumeric) {
+                    if (tierCol != null) tierColIsNumeric = tierCol.getCellTypeEnum() == CellType.NUMERIC;
+                    if (gradeCol != null) gradeColIsNumeric = gradeCol.getCellTypeEnum() == CellType.NUMERIC;
+                    if (tierColIsNumeric && gradeColIsNumeric) {
                         validRows.add(row);
                     } else {
                         problemRows.add(row);
                     }
                 }
                 for (XSSFRow row : validRows) {
-                    addToLottery(new ProspectiveStudent(row, row.getCell(colValues[0]).getStringCellValue(),
-                                row.getCell(colValues[1]).getStringCellValue(),
-                                Tier.getTier((int) row.getCell(colValues[2]).getNumericCellValue()),
-                                row.getCell(colValues[0]).getStringCellValue(),
-                                Grade.getGrade((int) row.getCell(colValues[3]).getNumericCellValue())));
+                    addToLottery(new ProspectiveStudent(row, row.getCell(lastNameColIndex).getStringCellValue(),
+                                row.getCell(firstNameColIndex).getStringCellValue(),
+                                Tier.getTier((int) row.getCell(tierColIndex).getNumericCellValue()),
+                                row.getCell(familyKeyColIndex).getStringCellValue(),
+                                Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue())));
                 }
             }
             rePopulateProspectiveStudents();
@@ -966,6 +986,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Problem loading the file:  " + ex.getMessage(), 
                     "Issue Loading Master File", JOptionPane.ERROR_MESSAGE);
+        }
+        if (!problemRows.isEmpty()) {
+            //Show the dialog for the problem rows...
         }
     }
     
@@ -990,6 +1013,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         JTableProspectiveStudents prospectiveStudentsTable;
         Object[][] tableItems = new Object[1][7];
         prospectiveStudentsTable = new JTableProspectiveStudents();
+        String[] headerCols = Columns.getColumnHeaders();
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         
         int rowCounter = 0;
@@ -1184,6 +1208,25 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             }
                         }
                         break;
+                    case SPREADSHEET_COLUMNS:
+                        String[] columnInfo = temp.trim().split(",");
+                        for (String columnStr : columnInfo) {
+                            String[] columnDetail = columnStr.trim().split(":");
+                            if (columnDetail.length < 2) {
+                                continue;
+                            }
+                            try {
+                                String colNumber = columnDetail[0].trim();
+                                String spreadsheetColStr = columnDetail[1].trim();
+                                Columns savedCol = Columns.getColumn(colNumber);
+                                if (savedCol != null) {
+                                    savedCol.setSpreadsheetColumn(spreadsheetColStr);
+                                }
+                            } catch (Exception ex) {
+                                continue;
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -1193,7 +1236,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }
     
-    private void saveSettings() {
+    public void saveSettings() {
         StringBuffer stringToWrite = new StringBuffer("");
         stringToWrite.append(SOURCE_LOCATION_DESC).append("~").append(jTextFieldMasterFileSource.getText()).append("\n");
         stringToWrite.append(DESTINATION_LOCATION_DESC).append("~").append(jTextFieldDestination.getText()).append("\n");
@@ -1219,7 +1262,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             }
         }
         stringToWrite.append("\n");
-
+        
+        //Save spreadsheet settings
+        stringToWrite.append(SPREADSHEET_COLUMNS).append("~");
+        for (Columns value : Columns.values()) {
+            stringToWrite.append(String.valueOf(value.getOrder())).append(":").append(value.getSpreadsheetColumn()).append(",");
+        }
+        stringToWrite.append("\n");
+        
         Path fileDest = Paths.get(homeDir, appName, toolSettingsFileName);
         try {
             FileUtilities.writeStringToFile(fileDest, stringToWrite, false);
@@ -1234,7 +1284,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String actionCommand = e.getActionCommand();
+        if (e.getSource() instanceof JTextFieldFilter) {
+            if (e.getSource() == jTextFieldFilterStudents) {
+                updateDB_Search();
+            }
+        }
     }
     
 }
