@@ -612,8 +612,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
         jTextFieldFilterStudents.setToolTipText("");
         jTextFieldFilterStudents.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldFilterStudentsKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldFilterStudentsKeyReleased(evt);
             }
         });
 
@@ -755,9 +755,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }//GEN-LAST:event_jLabelClearAllGradesMouseClicked
 
-    private void jTextFieldFilterStudentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFilterStudentsKeyPressed
+    private void jTextFieldFilterStudentsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFilterStudentsKeyReleased
         updateDB_Search();
-    }//GEN-LAST:event_jTextFieldFilterStudentsKeyPressed
+    }//GEN-LAST:event_jTextFieldFilterStudentsKeyReleased
 
     /**
      * @param args the command line arguments
