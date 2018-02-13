@@ -175,7 +175,7 @@ public class SpreadsheetImport extends javax.swing.JDialog {
     private javax.swing.JPanel jPanelCustomActions;
     // End of variables declaration//GEN-END:variables
 
-    private LotteryFrame parentFrame;
+    private final LotteryFrame parentFrame;
     
     private void initMyComponents() {
         initColumnFields();

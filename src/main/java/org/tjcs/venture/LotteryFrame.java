@@ -1013,7 +1013,16 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
         if (!problemRows.isEmpty()) {
             //Show the dialog for the problem rows...
+            ImportIssuesDialog importIssuesDialog = new ImportIssuesDialog(this, true);
+            importIssuesDialog.setLocationRelativeTo(this);
+            importIssuesDialog.setProblemRows(problemRows);
+            importIssuesDialog.buildTable();
+            importIssuesDialog.setVisible(true);
         }
+    }
+    
+    public void resetCursor() {
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
     private boolean isGradeChecked(Grade grade) {
