@@ -9,6 +9,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -715,6 +717,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_jButtonBrowseForMasterFileActionPerformed
 
     private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
+        continueLoad = false;
+        setImportSettings();
+         if (!continueLoad) {
+            return;
+        }
         loadSpreadsheet();
     }//GEN-LAST:event_jButtonImportActionPerformed
 
@@ -782,7 +789,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LotteryFrame().setVisible(true);
+                LotteryFrame lotteryFrame = new LotteryFrame();
+                lotteryFrame.setLocationRelativeTo(null);
+                lotteryFrame.setVisible(true);
             }
         });
     }
@@ -867,6 +876,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     //private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
     private Map<Grade, JCheckBox> gradeCheckBoxesMap;
     private Map<Grade, JTextField> gradeAvailableSeatsMap;
+    private boolean continueLoad = false;
     
     private void initMyComponents() {
         dbRecordCellList = new ArrayList<>();
@@ -912,6 +922,22 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             saveSettings();
         }
     }
+
+    public void setContinueLoad(boolean continueLoad) {
+        this.continueLoad = continueLoad;
+    }
+    
+    private void setImportSettings() {
+        SpreadsheetImport importSettings = new SpreadsheetImport(this, true);
+        importSettings.setLocationRelativeTo(this);
+        importSettings.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            }
+        });
+        importSettings.setVisible(true);
+    }
     
     private void loadSpreadsheet() {
         //getSpreadsheetData();
@@ -925,13 +951,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         if (filename == null
                 || filename.isEmpty()
                 || !Paths.get(filename).toFile().exists()) {
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "The source filename is either invalid or does not exist", "Invalid file", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        SpreadsheetImport importSettings = new SpreadsheetImport(this, true);
-        importSettings.setVisible(true);
-        
+                
         int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
         int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
         int tierColIndex = Columns.getColumnIndex(Columns.TIER);

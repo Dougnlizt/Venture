@@ -5,15 +5,15 @@
  */
 package org.tjcs.venture;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,13 +44,33 @@ public class SpreadsheetImport extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPaneFields = new javax.swing.JScrollPane();
         jPanelCustomActions = new javax.swing.JPanel();
+        jButtonCancel = new javax.swing.JButton();
+        jButtonSaveAndContinue = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanelCustomActions.setLayout(new java.awt.GridBagLayout());
-        jScrollPaneFields.setViewportView(jPanelCustomActions);
+
+        jButtonCancel.setText("Cancel");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+
+        jButtonSaveAndContinue.setText("Save and Continue");
+        jButtonSaveAndContinue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveAndContinueActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Select the spreadsheet column that");
+
+        jLabel2.setText("corresponds to the description");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,19 +78,52 @@ public class SpreadsheetImport extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneFields, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 33, Short.MAX_VALUE)
+                                .addComponent(jButtonSaveAndContinue)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonCancel)))
+                        .addContainerGap())
+                    .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPaneFields, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(36, 36, 36)
+                .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButtonSaveAndContinue))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonSaveAndContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveAndContinueActionPerformed
+        parentFrame.saveSettings();
+        parentFrame.setContinueLoad(true);
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        this.dispose();
+    }//GEN-LAST:event_jButtonSaveAndContinueActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+        parentFrame.setContinueLoad(false);
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -115,8 +168,11 @@ public class SpreadsheetImport extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonSaveAndContinue;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelCustomActions;
-    private javax.swing.JScrollPane jScrollPaneFields;
     // End of variables declaration//GEN-END:variables
 
     private LotteryFrame parentFrame;
@@ -132,33 +188,38 @@ public class SpreadsheetImport extends javax.swing.JDialog {
         
         jPanelCustomActions.removeAll();
         gbc = new GridBagConstraints();
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
         gbc.gridx = 0;
         gbc.gridy = rowCount ++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        Insets insetsHeaderLeft = new Insets(4, 10, 0, 10);
+        Insets insetsHeaderRight = new Insets(4, 20, 0, 0);
 
-//        jPanelCustomActions.add(jButtonCustomizeActions, gbc);
-//        
-//        Box.Filler gap = new Box.Filler(new Dimension(10, 15), new Dimension(10, 15), new Dimension(10, 15));
-//        gbc.gridy = rowCount ++;
-//        jPanelCustomActions.add(gap, gbc);
-        
-        
-        //Get all column letters, starting with A through ZZ
-        int asciA_StartsAt = 65;
-        List<String> charactersArray = new ArrayList<>();
-        for (int i = 0; i < 26; i ++) {
-            String character = String.valueOf((char) (asciA_StartsAt + i));
-            charactersArray.add(character);
-        }
-        for (int i = 0; i < 26; i ++) {
-            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
-            for (int j = 0; j < 26; j ++) {
-                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
-                charactersArray.add(firstCharacter + secondCharacter);
-            }
-        }
+        JLabel columnHeading = new JLabel("Description");
+        Font boldFont = columnHeading.getFont();
+        boldFont = new Font(boldFont.getFamily(), Font.BOLD, boldFont.getSize());
+
+        columnHeading.setFont(boldFont);
+        gbc.gridx = 0;
+        //gbc.gridy = rowCount++;
+        gbc.insets = insetsHeaderLeft;
+        jPanelCustomActions.add(columnHeading, gbc);
+        gbc.gridx = 1;
+        gbc.insets = insetsHeaderRight;
+        columnHeading = new JLabel("<html><center>Spreadsheet<br/>Column</center></html>");
+        columnHeading.setFont(boldFont);
+        jPanelCustomActions.add(columnHeading, gbc);
+            
+        List<String> charactersArray = Utilities.getSpreadsheetColumnLetters();
         
         String[] items = charactersArray.toArray(new String[0]);
+        
+        Dimension preferredSpreadsheetColumnDimensions = new Dimension(5, 28);
+        
+        Insets insetsLeft = new Insets(2, 5, 2, 5);
+        Insets insetsRight = new Insets(2, 20, 2, 10);
         
         for (Columns column : Columns.values()) {
             if (!column.isFromSpreadsheet()) continue;
@@ -166,25 +227,27 @@ public class SpreadsheetImport extends javax.swing.JDialog {
             JComboBox spreadsheetColumnn = new JComboBox(items);
             spreadsheetColumnn.setSelectedItem(column.getSpreadsheetColumn());
             spreadsheetColumnn.setToolTipText("Select the matching column in the spreadsheet");
+            spreadsheetColumnn.setPreferredSize(preferredSpreadsheetColumnDimensions);
+            spreadsheetColumnn.setSize(preferredSpreadsheetColumnDimensions);
             spreadsheetColumnn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     column.setSpreadsheetColumn((String) spreadsheetColumnn.getSelectedItem());
-                    parentFrame.saveSettings();
+                    //parentFrame.saveSettings();
                 }
             });
             
             gbc.gridx = 0;
             gbc.gridy = rowCount++;
+            gbc.insets = insetsLeft; //new Insets(0, 0, 0, 0);
             jPanelCustomActions.add(columnLabel, gbc);
             gbc.gridx = 1;
+            gbc.insets = insetsRight;
             jPanelCustomActions.add(spreadsheetColumnn, gbc);
         }
         
         jPanelCustomActions.revalidate();
         jPanelCustomActions.repaint();
-        jScrollPaneFields.revalidate();
-        jScrollPaneFields.repaint();
         pack();
     }
 }
