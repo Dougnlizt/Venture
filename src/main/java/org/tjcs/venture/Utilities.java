@@ -128,7 +128,7 @@ public class Utilities {
         FIRST_NAME(2, "First Name", "D", true),
         TIER(3, "Tier", "E", true),
         GRADE(4, "Grade", "W", true),
-        FAMILY_KEY(5, "Family Key", "C", false),
+        FAMILY_KEY(5, "Family Key", "C", true),
         WAIT_LIST_SIBLINGS(6, "Wait List Siblings", null, false),
         ;
         private int order;

@@ -34,7 +34,8 @@ public class JTableProspectiveStudents extends JTable {
 
     public JTableProspectiveStudents() {
         super();
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        setRowSelectionAllowed(false);
     }
 
     private Object[][] recordCell = new Object[0][0];
@@ -76,6 +77,11 @@ public class JTableProspectiveStudents extends JTable {
 
     public String[] getTableHeaderRow() {
         return tableHeaderRow;
+    }
+
+    @Override
+    public boolean isFocusable() {
+        return false;
     }
 
     private class ProspectiveStudentsTableModel extends AbstractTableModel {
@@ -128,7 +134,7 @@ public class JTableProspectiveStudents extends JTable {
             //no matter where the cell appears onscreen.
             return false;
         }
-
+        
         public void setRowCount(int numRows) {
             recordCell = new Object[0][0];
             repaint();

@@ -5,9 +5,11 @@
  */
 package org.tjcs.venture;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.tjcs.venture.Utilities.Columns;
@@ -37,19 +39,13 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jScrollPaneInvalidRecords = new javax.swing.JScrollPane();
         jTableInvalidRecords = new javax.swing.JTable();
         jButtonOK = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("The following records could not be imported.  Please check the spreadsheet data and adjust accordingly.");
-        jScrollPane1.setViewportView(jTextArea1);
 
         jTableInvalidRecords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -64,12 +60,25 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         ));
         jScrollPaneInvalidRecords.setViewportView(jTableInvalidRecords);
 
-        jButtonOK.setText("OK");
+        jButtonOK.setText("Close");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
             }
         });
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        jTextPane1.setEditable(false);
+        jTextPane1.setBorder(null);
+        jTextPane1.setText("The following records could not be imported.  Please check the spreadsheet data and adjust accordingly.");
+        jTextPane1.setDragEnabled(false);
+        jTextPane1.setFocusable(false);
+        jTextPane1.setOpaque(false);
+        jTextPane1.setRequestFocusEnabled(false);
+        jScrollPane2.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,20 +87,20 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonOK)))
+                        .addComponent(jButtonOK))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonOK)
                 .addContainerGap())
@@ -148,10 +157,10 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonOK;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPaneInvalidRecords;
     private javax.swing.JTable jTableInvalidRecords;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
     
     private final LotteryFrame parentFrame;
@@ -159,6 +168,10 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
 
     private void initMyComponents() {
         //buildTable();
+        this.setTitle("Spreadsheet Import Issues");
+        //jTextPane1.setOpaque(false);
+        //jTextPane1.setBorder(BorderFactory.createEmptyBorder());
+        jTextPane1.setBackground(new Color(0,0,0,0));
     }
 
     public void setProblemRows(List<XSSFRow> problemRows) {
@@ -169,7 +182,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         List<DB_RecordCell> dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
         prospectiveStudentsTable = new JTableProspectiveStudents();
-        String[] headerCols = new String[] {"Row",
+        String[] headerCols = new String[] {"Spreadsheet Row",
                                             Columns.LAST_NAME.getColumnName(),
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.TIER.getColumnName(),
@@ -188,7 +201,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         
         for (XSSFRow row : problemRows) {
             int colCounter = 0;
-            DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(row.getRowNum()), rowCounter, colCounter);
+            DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(row.getRowNum() + 1), rowCounter, colCounter);
             dbRecordCellList.add(tempCell);
             tempCell = getCellValue(row, lastNameColIndex, rowCounter, colCounter++);
             dbRecordCellList.add(tempCell);

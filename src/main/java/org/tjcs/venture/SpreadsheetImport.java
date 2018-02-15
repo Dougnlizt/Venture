@@ -30,7 +30,7 @@ public class SpreadsheetImport extends javax.swing.JDialog {
      */
     public SpreadsheetImport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        parentFrame = (LotteryFrame) (JFrame) parent;
+        parentFrame = (LotteryFrame) parent;
         initComponents();
         initMyComponents();
     }
@@ -46,7 +46,7 @@ public class SpreadsheetImport extends javax.swing.JDialog {
 
         jPanelCustomActions = new javax.swing.JPanel();
         jButtonCancel = new javax.swing.JButton();
-        jButtonSaveAndContinue = new javax.swing.JButton();
+        jButtonSaveAndClose = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -61,10 +61,10 @@ public class SpreadsheetImport extends javax.swing.JDialog {
             }
         });
 
-        jButtonSaveAndContinue.setText("Save and Continue");
-        jButtonSaveAndContinue.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSaveAndClose.setText("Save and Close");
+        jButtonSaveAndClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSaveAndContinueActionPerformed(evt);
+                jButtonSaveAndCloseActionPerformed(evt);
             }
         });
 
@@ -80,20 +80,20 @@ public class SpreadsheetImport extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 33, Short.MAX_VALUE)
-                                .addComponent(jButtonSaveAndContinue)
+                                .addGap(0, 55, Short.MAX_VALUE)
+                                .addComponent(jButtonSaveAndClose)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonCancel)))
-                        .addContainerGap())
-                    .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,27 +101,27 @@ public class SpreadsheetImport extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(36, 36, 36)
-                .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelCustomActions, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancel)
-                    .addComponent(jButtonSaveAndContinue))
+                    .addComponent(jButtonSaveAndClose))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSaveAndContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveAndContinueActionPerformed
+    private void jButtonSaveAndCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveAndCloseActionPerformed
         parentFrame.saveSettings();
-        parentFrame.setContinueLoad(true);
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        //parentFrame.setContinueLoad(true);
+        //this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         this.dispose();
-    }//GEN-LAST:event_jButtonSaveAndContinueActionPerformed
+    }//GEN-LAST:event_jButtonSaveAndCloseActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        parentFrame.setContinueLoad(false);
+        //parentFrame.setContinueLoad(false);
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
@@ -169,7 +169,7 @@ public class SpreadsheetImport extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
-    private javax.swing.JButton jButtonSaveAndContinue;
+    private javax.swing.JButton jButtonSaveAndClose;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelCustomActions;
@@ -178,6 +178,7 @@ public class SpreadsheetImport extends javax.swing.JDialog {
     private final LotteryFrame parentFrame;
     
     private void initMyComponents() {
+        this.setTitle("Spreadsheet Import Settings");
         initColumnFields();
     }
     
