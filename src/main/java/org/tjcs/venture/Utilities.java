@@ -37,6 +37,10 @@ public class Utilities {
             this.number = number;
             this.description = description;
         }
+
+        public int getNumber() {
+            return number;
+        }
         
         public static Tier getTier(String number) {
             if (number == null || number.trim().isEmpty()) return UNKNOWN;
@@ -65,27 +69,29 @@ public class Utilities {
     }
     
     public enum Grade {
-        TWELFTH(12, "12th"),
-        ELEVENTH(11, "11th"),
-        TENTH(10, "10th"),
-        NINTH(9, "9th"),
-        EIGHTH(8, "8th"),
-        SEVENTH(7, "7th"),
-        SIXTH(6, "6th"),
-        FIFTH(5, "5th"),
-        FOURTH(4, "4th"),
-        THIRD(3, "3rd"),
-        SECOND(2, "2nd"),
-        FIRST(1, "1st"),
-        KINDER(0, "Kinder"),
-        UNKNOWN(-1, "Unknown"),
+        TWELFTH(12, "12th", false),
+        ELEVENTH(11, "11th", false),
+        TENTH(10, "10th", false),
+        NINTH(9, "9th", false),
+        EIGHTH(8, "8th", false),
+        SEVENTH(7, "7th", false),
+        SIXTH(6, "6th", false),
+        FIFTH(5, "5th", false),
+        FOURTH(4, "4th", false),
+        THIRD(3, "3rd", false),
+        SECOND(2, "2nd", false),
+        FIRST(1, "1st", false),
+        KINDER(0, "Kinder", false),
+        UNKNOWN(-1, "Unknown", false),
         ;
         private final int number;
         private final String gradeDescription;
+        private boolean lotteryComplete;
 
-        private Grade(int gradeNumber, String gradeDescription) {
+        private Grade(int gradeNumber, String gradeDescription, boolean lotteryComplete) {
             this.number = gradeNumber;
             this.gradeDescription = gradeDescription;
+            this.lotteryComplete = lotteryComplete;
         }
         
         public static Grade getGrade(int gradeNumber) {
@@ -101,6 +107,14 @@ public class Utilities {
 
         public String getGradeDescription() {
             return gradeDescription;
+        }
+
+        public boolean isLotteryComplete() {
+            return lotteryComplete;
+        }
+
+        public void setLotteryComplete(boolean lotteryComplete) {
+            this.lotteryComplete = lotteryComplete;
         }
         
         public static Grade getGrade(String gradeNumber) {
@@ -120,6 +134,7 @@ public class Utilities {
             }
             return String.valueOf(Grade.UNKNOWN.number);
         }
+        
     }
     
     public enum Columns {

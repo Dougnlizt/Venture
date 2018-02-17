@@ -17,6 +17,7 @@ import org.tjcs.venture.Utilities.Tier;
  */
 public class ProspectiveStudent {
     private int LotteryDrawNumber = -1;
+    private boolean availableSeatOffered = false;
     private boolean changeInTier;
     private List<ProspectiveStudent> siblingsOnWaitlist = new ArrayList<>();
     
@@ -68,6 +69,14 @@ public class ProspectiveStudent {
         this.LotteryDrawNumber = LotteryDrawNumber;
     }
 
+    public boolean isAvailableSeatOffered() {
+        return availableSeatOffered;
+    }
+
+    public void setAvailableSeatOffered(boolean availableSeatOffered) {
+        this.availableSeatOffered = availableSeatOffered;
+    }
+
     public Grade getGrade() {
         return grade;
     }
@@ -82,6 +91,11 @@ public class ProspectiveStudent {
 
     public List<ProspectiveStudent> getSiblingsOnWaitlist() {
         return siblingsOnWaitlist;
+    }
+
+    @Override
+    public String toString() {
+        return lastName + ", " + firstName;
     }
     
     

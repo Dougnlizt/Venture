@@ -182,7 +182,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         List<DB_RecordCell> dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
         prospectiveStudentsTable = new JTableProspectiveStudents();
-        String[] headerCols = new String[] {"Spreadsheet Row",
+        String[] headerCols = new String[] {"Data Row #",
                                             Columns.LAST_NAME.getColumnName(),
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.TIER.getColumnName(),

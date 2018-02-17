@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.tjcs.venture.Utilities.Grade;
 import org.tjcs.venture.Utilities.Tier;
 
@@ -21,7 +22,7 @@ public class Lottery {
     private final int openSeats;
     private List<ProspectiveStudent> studentsAddedToClass = new ArrayList<>();
     private List<ProspectiveStudent> studentsOnWaitList = new ArrayList<>();
-    private Map<Tier, List<ProspectiveStudent>> tierPS_List = new HashMap<>();
+    private Map<Tier, List<ProspectiveStudent>> tierPS_List = new TreeMap<>();
 
     public Lottery(Grade grade, int openSeats) {
         this.grade = grade;

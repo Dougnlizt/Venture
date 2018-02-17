@@ -27,6 +27,7 @@ public class DB_RecordCell extends JLabel implements ActionListener, Comparable<
     public final static String SELECTED = "Selected";
     private int row = 0;
     private int col = 0;
+    private ProspectiveStudent prospectiveStudent;
 
     public DB_RecordCell(String value, int row, int col) {
         _value = value;
@@ -71,6 +72,14 @@ public class DB_RecordCell extends JLabel implements ActionListener, Comparable<
 
     public void setValue(String value) {
         this._value = value;
+    }
+
+    public ProspectiveStudent getProspectiveStudent() {
+        return prospectiveStudent;
+    }
+
+    public void setProspectiveStudent(ProspectiveStudent prospectiveStudent) {
+        this.prospectiveStudent = prospectiveStudent;
     }
 
     @Override

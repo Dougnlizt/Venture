@@ -16,15 +16,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
+import org.tjcs.venture.Utilities.Columns;
 
 /**
  *
@@ -38,12 +42,13 @@ public class JTableProspectiveStudents extends JTable {
         setRowSelectionAllowed(false);
     }
 
-    private Object[][] recordCell = new Object[0][0];
+    private Object[][] recordCellArray = new Object[0][0];
     private String[] tableHeaderRow = new String[0];
     private ProspectiveStudentsTableModel tableModel = new ProspectiveStudentsTableModel();
     private int maxOptionWidth = 0;
     private final Color evenRowBG = new Color(0xFF, 0xFF, 0xFF);
     private final Color oddRowBG = new Color(0xEE, 0xEE, 0xEE);
+    private final Color wonLotteryBG = new Color(0xBB, 0xED, 0xC3);
     private final Font fontBold = new Font(null, Font.BOLD, 12);
 
     @SuppressWarnings("unchecked")
@@ -64,11 +69,11 @@ public class JTableProspectiveStudents extends JTable {
     }
 
     public void setProspectiveStudents(Object[][] prospectiveStudents) {
-        this.recordCell = prospectiveStudents;
+        this.recordCellArray = prospectiveStudents;
     }
 
     public Object[][] getProspectiveStudents() {
-        return recordCell;
+        return recordCellArray;
     }
 
     public void setTableHeaderRow(String[] headerCols) {
@@ -98,10 +103,10 @@ public class JTableProspectiveStudents extends JTable {
 //
         @Override
         public int getRowCount() {
-            if (recordCell == null) {
+            if (recordCellArray == null) {
                 return 0;
             } else {
-                return recordCell.length;
+                return recordCellArray.length;
             }
         }
 
@@ -117,10 +122,10 @@ public class JTableProspectiveStudents extends JTable {
 //
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            if (recordCell == null || rowIndex > recordCell.length - 1) {
+            if (recordCellArray == null || rowIndex > recordCellArray.length - 1) {
                 return null;
             } else {
-                return recordCell[rowIndex][columnIndex];
+                return recordCellArray[rowIndex][columnIndex];
             }
         }
 //
@@ -136,7 +141,7 @@ public class JTableProspectiveStudents extends JTable {
         }
         
         public void setRowCount(int numRows) {
-            recordCell = new Object[0][0];
+            recordCellArray = new Object[0][0];
             repaint();
         }
 
@@ -220,25 +225,6 @@ public class JTableProspectiveStudents extends JTable {
                 return;
             }
         }
-        //Set the sorting order for Bank Address then Fuse Address
-//        List <RowSorter.SortKey> sortKeys = new ArrayList<>();
-//        int BA_Col = 0;
-//        int FA_Col = 0;
-//        for (int i = 0; i < getColumnCount(); i ++) {
-//            switch (_tableHeaderRow[i]) {
-//                case BANK_ADDRESS_HEADER_STR:
-//                    BA_Col = i;
-//                    continue;
-//                case FUSE_ADDRESS_HEADER_STR:
-//                    FA_Col = i;
-//                    continue;
-//            }
-//        }
-//        sortKeys.add(new RowSorter.SortKey(BA_Col, SortOrder.ASCENDING));
-//        sortKeys.add(new RowSorter.SortKey(FA_Col, SortOrder.DESCENDING));
-//        sorter.setSortKeys(sortKeys);
-//        sorter.setComparator(BA_Col, _hexComparator);
-//        sorter.setComparator(FA_Col, _hexComparator);
 
         //OK, now apply any filtering
         if (regEx == null || regEx.isEmpty()) {
@@ -251,43 +237,40 @@ public class JTableProspectiveStudents extends JTable {
         try {
             rf = new RowFilter<ProspectiveStudentsTableModel, Object>() {
                 private Matcher matcher;
-                StringBuilder sbTextOnly = new StringBuilder("");
-                StringBuilder sbRegExp = new StringBuilder("");
                 boolean useAsRegExp = false;
+                private int rowCounter = -1;
                 {
-                    if (matchCase) {
-                        sbTextOnly.append(regEx);
-                    } else {
-                        for (int i = 0; i < regEx.length(); i++) {
-                            char c = regEx.charAt(i);
-                            if (c == '[') {
-                                useAsRegExp = true;
-                            }
-                            sbTextOnly.append('[').append(Character.toLowerCase(c)).append(Character.toUpperCase(c)).append(']');
-                            sbRegExp.append(c);
-                        }
-                    }
-                    if (useAsRegExp) {
-                        matcher = Pattern.compile(sbRegExp.toString()).matcher("");
-                    } else {
-                        matcher = Pattern.compile(sbTextOnly.toString()).matcher("");
-                    }
+                    matcher = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE).matcher("");
                 }
 
                 @Override
                 public boolean include(RowFilter.Entry<? extends ProspectiveStudentsTableModel, ? extends Object> entry) {
                     try {
                         //Check to see if it matches
-                        String value;
-                        //Check each column value for this entry (row)
-                        for (int i = entry.getValueCount() - 1; i >=0; i--) {
-                            value = entry.getStringValue(i);
-                            matcher.reset(value);
-                            if (matcher.find()) {
-                                return true;
-                            }
+                        //String value;
+                        //Since already figured out which cell matches and which one doesn't, and to only bother checking
+                            //certain columns, use the record already in the cell to return if there was a matched search.
+                            //Already doing this so that I can highlight the value of the found match.
+                        rowCounter ++;
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.LAST_NAME.getOrder()]).isSearchMatch()) {
+                            return true;
+                        }
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FIRST_NAME.getOrder()]).isSearchMatch()) {
+                            return true;
+                        }
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FAMILY_KEY.getOrder()]).isSearchMatch()) {
+                            return true;
                         }
                         return false;
+//                        //Check each column value for this entry (row)
+//                        for (int i = entry.getValueCount() - 1; i >=0; i--) {
+//                            value = entry.getStringValue(i);
+//                            matcher.reset(value);
+//                            if (matcher.find()) {
+//                                return true;
+//                            }
+//                        }
+//                        return false;
                     } catch (Exception ex) {
                         return false;
                     }
@@ -325,8 +308,15 @@ public class JTableProspectiveStudents extends JTable {
             Component comp = this;
             if (obj instanceof DB_RecordCell) {
                 DB_RecordCell recordCell = (DB_RecordCell) obj;
-                Color bgColor = (row % 2 == 0) ? evenRowBG : oddRowBG;
-                setBackground(bgColor);
+                Color bgColor = null;
+                if (recordCell.getProspectiveStudent() != null
+                        && recordCell.getProspectiveStudent().isAvailableSeatOffered()) {
+                    bgColor = wonLotteryBG;
+                    setBackground(bgColor);
+                } else {
+                    bgColor = (row % 2 == 0) ? evenRowBG : oddRowBG;
+                    setBackground(bgColor);
+                }
 
                 //If this option was found as part of a search, highlight accordingly...
                 if (recordCell.isSearchMatch()) {
@@ -350,8 +340,8 @@ public class JTableProspectiveStudents extends JTable {
     }
 
     public void scrollToItem(DB_RecordCell cellValue) {
-        for (int row = 0; row < recordCell.length; row ++) {
-            if (((DB_RecordCell) recordCell[row][0]) == cellValue) {
+        for (int row = 0; row < recordCellArray.length; row ++) {
+            if (((DB_RecordCell) recordCellArray[row][0]) == cellValue) {
                 scrollRectToVisible(getCellRect(row, 0, true));
                 break;
             }
@@ -359,8 +349,8 @@ public class JTableProspectiveStudents extends JTable {
     }
 
     public void selectItem(DB_RecordCell cellValue) {
-        for (int row = 0; row < recordCell.length; row ++) {
-            if (((DB_RecordCell) recordCell[row][0]) == cellValue) {
+        for (int row = 0; row < recordCellArray.length; row ++) {
+            if (((DB_RecordCell) recordCellArray[row][0]) == cellValue) {
                 changeSelection(row, 0, false, false);
                 scrollRectToVisible(getCellRect(row, 0, true));
                 break;

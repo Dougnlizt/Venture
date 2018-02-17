@@ -17,10 +17,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -508,7 +514,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
         jButtonStartLottery.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jButtonStartLottery.setForeground(new java.awt.Color(0, 153, 51));
-        jButtonStartLottery.setText("<html><center>Start<br/>Lottery</center></html>");
+        jButtonStartLottery.setText("<html><center>Start<br/>Lottery</center></html>"); // NOI18N
+        jButtonStartLottery.setMaximumSize(new java.awt.Dimension(108, 52));
         jButtonStartLottery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonStartLotteryActionPerformed(evt);
@@ -527,32 +534,32 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(6, 6, 6)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
                     .addComponent(jCheckBox12th)
                     .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
                     .addComponent(jCheckBox11th)
                     .addComponent(jTextField11th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8)
                     .addComponent(jCheckBox10th)
                     .addComponent(jTextField10th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9)
                     .addComponent(jCheckBox9th)
-                    .addComponent(jTextField9th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextField9th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10)
                     .addComponent(jCheckBox8th)
-                    .addComponent(jTextField8th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextField8th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11)
                     .addComponent(jCheckBox7th)
                     .addComponent(jTextField7th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -564,7 +571,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jTextField5th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox5th)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jTextField4th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -591,7 +598,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jCheckBoxKinder)
                     .addComponent(jLabel18))
                 .addGap(11, 11, 11)
-                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -633,7 +641,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                     .addComponent(jCheckBoxKinder, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField6th, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextField6th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -649,8 +657,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                         .addComponent(jTextField1st, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextFieldKinder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jCheckBox11th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButtonStartLottery))
-                .addContainerGap())
+                    .addComponent(jButtonStartLottery, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jTablePropsectiveStudents.setModel(new javax.swing.table.DefaultTableModel(
@@ -713,8 +720,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabelSelectAllGrades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelClearAllGrades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldFilterStudents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21)
@@ -749,10 +756,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonStartLotteryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartLotteryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonStartLotteryActionPerformed
-
     private void jButtonBrowseForMasterFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseForMasterFileActionPerformed
         selectSourceFile();
     }//GEN-LAST:event_jButtonBrowseForMasterFileActionPerformed
@@ -771,10 +774,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_jLabelSelectAllGradesMouseExited
 
     private void jLabelSelectAllGradesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSelectAllGradesMouseClicked
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
             JCheckBox value = entry.getValue();
             value.setSelected(true);
         }
+        saveSettings();
+        rePopulateProspectiveStudents();
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jLabelSelectAllGradesMouseClicked
 
     private void jLabelClearAllGradesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearAllGradesMouseEntered
@@ -786,10 +793,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_jLabelClearAllGradesMouseExited
 
     private void jLabelClearAllGradesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearAllGradesMouseClicked
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
             JCheckBox value = entry.getValue();
             value.setSelected(false);
         }
+        saveSettings();
+        rePopulateProspectiveStudents();
+        jLabelClearAllGrades.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jLabelClearAllGradesMouseClicked
 
     private void jTextFieldFilterStudentsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFilterStudentsKeyReleased
@@ -813,6 +824,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private void jLabelImportIssuesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelImportIssuesMouseExited
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jLabelImportIssuesMouseExited
+
+    private void jButtonStartLotteryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartLotteryActionPerformed
+        runLottery();
+    }//GEN-LAST:event_jButtonStartLotteryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1026,7 +1041,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         //getSpreadsheetData();
         jLabelImportIssues.setVisible(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        gradeLotteryMap = new HashMap<>();
+        gradeLotteryMap = new TreeMap<>();
         List<XSSFRow> validRows = new ArrayList<>();
         problemRows = new ArrayList<>();
         
@@ -1100,6 +1115,32 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                 row.getCell(familyKeyColIndex).getStringCellValue(),
                                 Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue())));
                 }
+                //Need to set the siblings based on the family key
+                List<ProspectiveStudent> tempList = new ArrayList<>();
+                for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                    Grade grade = entry.getKey();
+                    grade.setLotteryComplete(false);
+                    Lottery value = entry.getValue();
+                    Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = value.getTierPS_List();
+                    for (Tier tier : Tier.values()) {
+                        if (prospectiveStudentsTierMap.get(tier) == null) continue;
+                        tempList.addAll(prospectiveStudentsTierMap.get(tier));
+                    }
+                }
+                for (ProspectiveStudent prospectiveStudent : tempList) {
+                    if (prospectiveStudent.getFamilyKey() == null) {
+                        continue;
+                    }
+                    for (ProspectiveStudent potentialSibling : tempList) {
+                        if (prospectiveStudent == potentialSibling) {
+                            continue;
+                        }
+                        if (potentialSibling.getFamilyKey().equals(prospectiveStudent.getFamilyKey())) {
+                            prospectiveStudent.getSiblingsOnWaitlist().add(potentialSibling);
+                        }
+                    }
+                }
+                break;
             }
             rePopulateProspectiveStudents();
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1157,24 +1198,31 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 for (ProspectiveStudent prospectiveStudent : prospectiveStudentsTierMap.get(tier)) { // value.getStudentsByTier(tier)) {
                     int colCounter = 0;
                     DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getLotteryDrawNumber()), rowCounter, colCounter);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(prospectiveStudent.getLastName(), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(prospectiveStudent.getFirstName(), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(Tier.getNumberStr(prospectiveStudent.getTier()), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(Grade.getNumberStr(prospectiveStudent.getGrade()), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(prospectiveStudent.getFamilyKey(), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getSiblingsOnWaitlist().size()), rowCounter, colCounter++);
+                    tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
                     rowCounter ++;
@@ -1213,7 +1261,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         Lottery tempLottery = gradeLotteryMap.get(grade);
         String availableSeats = gradeAvailableSeatsMap.get(grade).getText().trim();
         if (tempLottery == null) {
-        int numSeats = 0;
+            int numSeats = 0;
             if (availableSeats != null) {
                 try {
                     numSeats = Integer.parseInt(availableSeats);
@@ -1232,6 +1280,168 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             tempLottery.getTierPS_List().put(ps.getTier(), tierList);
         }
         tierList.add(ps);
+    }
+    
+    private void runLottery() {
+        //Need to start a runnable
+        progress = 0.0;
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        LotteryThread target = new LotteryThread();
+        target.setLotteryFrame(this);
+        Thread th = new Thread(target, "Lottery");
+        th.start();
+//        int slowCounter = 0;
+//        while (th.isAlive() || slowCounter < 1) {
+//            try {
+//                progress = Math.min(progress, slowCounter / 20);
+//                //jButtonStartLottery.setText(String.format("%.1f", progress) + "%");
+//                Thread.sleep(500);
+//                slowCounter ++;
+//            } catch (InterruptedException ex) {
+//                //Ignore
+//            }
+//        }
+//        rePopulateProspectiveStudents();
+    }
+    
+    public int continueOnAlreadyExists(Grade grade) {
+        int answer = JOptionPane.showConfirmDialog(this, "The " + grade.getGradeDescription()
+            + " grade has already had the lottery.  Do you really want to run it again?",
+            "Lottery Already Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        return answer;
+    }
+    
+    private double progress = 0.0;
+    
+    private class LotteryThread implements Runnable {
+        
+        LotteryFrame lotteryFrame;
+        private NumberFormat percentCompleteFormat = NumberFormat.getPercentInstance();
+
+        public void setLotteryFrame(LotteryFrame lotteryFrame) {
+            this.lotteryFrame = lotteryFrame;
+        }
+        
+        @Override
+        public void run() {
+            //Go through the grade lottery map
+            //Get the number of available seats
+            //Shuffle each tier array
+            //Set the lottery draw number based on a counter
+            //If there is an available seat, set the 'available seat' flag
+                //Check for any siblings (siblings list).  Update the tier accordingly.
+            //Need to get a total count to provide a percentage
+            String originalButtonText = jButtonStartLottery.getText();
+            int numStudents = getLotteryStudents(true).size();
+            int studentCounter = 0;
+            percentCompleteFormat.setMaximumFractionDigits(0);
+            for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                Grade grade = entry.getKey();
+                if (!isGradeChecked(grade)) {
+                    continue;
+                }
+                if (grade.isLotteryComplete()) {
+                    int answer = continueOnAlreadyExists(grade);
+//                    int answer = JOptionPane.showConfirmDialog(lotteryFrame, "The " + grade.getGradeDescription()
+//                            + " grade has already had the lottery.  Do you really want to run it again?",
+//                            "Lottery Already Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (answer != JOptionPane.YES_OPTION) {
+                        continue;
+                    }
+                }
+                Lottery value = entry.getValue();
+                int numSeats = value.getOpenSeats();
+                int lotteryDrawCounter = 1;
+                Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = value.getTierPS_List();
+                for (Tier tier : Tier.values()) {
+                    if (prospectiveStudentsTierMap.get(tier) == null) continue;
+                    Random rnd = new Random();
+                    List<ProspectiveStudent> prospectiveStudentsList = prospectiveStudentsTierMap.get(tier);
+                    Collections.shuffle(prospectiveStudentsList);
+                    for (ProspectiveStudent prospectiveStudent : prospectiveStudentsList) {
+                        studentCounter ++;
+                        progress = (double) studentCounter / (double) numStudents;
+                        prospectiveStudent.setLotteryDrawNumber(lotteryDrawCounter++);
+                        if (numSeats > 0) {
+                            Tier studentTier = prospectiveStudent.getTier();
+                            Tier newTier;
+                            switch (studentTier) {
+                                case CHILDREN_OF_EMPLOYEES_1:
+                                    newTier = Tier.CHILDREN_OF_EMPLOYEES_1;
+                                    break;
+                                case SIBLINGS_IN_DISTRICT_2:
+                                    newTier = Tier.SIBLINGS_IN_DISTRICT_2;
+                                    break;
+                                case SIBLINGS_IN_NEARBY_COUNTIES_3:
+                                    newTier = Tier.SIBLINGS_IN_NEARBY_COUNTIES_3;
+                                    break;
+                                case SIBLINGS_ALL_OTHER_4:
+                                    newTier = Tier.SIBLINGS_ALL_OTHER_4;
+                                    break;
+                                case DISTRICT_RESIDENTS_5:
+                                    newTier = Tier.SIBLINGS_IN_DISTRICT_2;
+                                    break;
+                                case NEARBY_COUNTY_RESIDENTS_6:
+                                    newTier = Tier.SIBLINGS_IN_NEARBY_COUNTIES_3;
+                                    break;
+                                case ALL_OTHER_7:
+                                    newTier = Tier.SIBLINGS_ALL_OTHER_4;
+                                    break;
+                                default:
+                                    newTier = Tier.UNKNOWN;
+                                    break;
+                            }
+                            prospectiveStudent.setAvailableSeatOffered(true);
+                            numSeats --;
+                            if (newTier.getNumber() > -1) {
+                                for (ProspectiveStudent sibling : prospectiveStudent.getSiblingsOnWaitlist()) {
+                                    //Need to bump a tier
+                                    if (newTier.getNumber() < sibling.getTier().getNumber()) {
+                                        sibling.setTier(newTier);
+                                    } else if (newTier.getNumber() > sibling.getTier().getNumber()) {
+                                        //DT:  This shouldn't happen...
+                                    }
+                                }
+                            }
+                        }
+                        updateProgressOutput();
+                    }
+                }
+
+                grade.setLotteryComplete(true);
+            }
+            rePopulateProspectiveStudents();
+            jButtonStartLottery.setText(originalButtonText);
+            lotteryFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }        
+        
+        private void updateProgressOutput() {
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LotteryFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //progress = Math.min(progress, slowCounter / 20);
+
+            jButtonStartLottery.setText(percentCompleteFormat.format(progress));
+        }
+    }
+    
+    private List<ProspectiveStudent> getLotteryStudents(boolean getOnlyChecked) {
+        List<ProspectiveStudent> prospectiveStudentList = new ArrayList<>();
+        for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+            Grade grade = entry.getKey();
+            if (getOnlyChecked && !isGradeChecked(grade)) {
+                continue;
+            }
+            Lottery value = entry.getValue();
+            Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = value.getTierPS_List();
+            for (Tier tier : Tier.values()) {
+                if (prospectiveStudentsTierMap.get(tier) == null) continue;
+                prospectiveStudentList.addAll(prospectiveStudentsTierMap.get(tier));
+            }
+        }
+        return prospectiveStudentList;
     }
 
     /**

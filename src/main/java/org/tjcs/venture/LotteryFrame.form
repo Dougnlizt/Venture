@@ -218,9 +218,9 @@
                       <Component id="jLabelSelectAllGrades" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabelClearAllGrades" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="jPanel4" min="-2" pref="81" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jTextFieldFilterStudents" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -229,7 +229,7 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPaneProspectiveStudents" pref="335" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -283,37 +283,37 @@
                       </Group>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel7" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
+                          <Component id="jLabel7" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox12th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField12th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel5" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel5" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox11th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField11th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel8" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel8" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox10th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField10th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel9" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel9" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox9th" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField9th" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jTextField9th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel10" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel10" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox8th" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField8th" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jTextField8th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="jLabel11" alignment="2" max="32767" attributes="0"/>
+                          <Component id="jLabel11" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jCheckBox7th" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField7th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
@@ -327,7 +327,7 @@
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jTextField5th" alignment="2" min="-2" pref="44" max="-2" attributes="0"/>
                           <Component id="jCheckBox5th" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel13" alignment="2" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="jLabel13" alignment="2" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
@@ -361,6 +361,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Component id="jButtonStartLottery" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -406,7 +407,7 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jTextField6th" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jTextField6th" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="jLabel20" alignment="3" min="-2" pref="19" max="-2" attributes="0"/>
                                               <Component id="jTextField12th" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -427,9 +428,8 @@
                                   <Component id="jCheckBox11th" min="-2" pref="19" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="jButtonStartLottery" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jButtonStartLottery" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -793,7 +793,10 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="99" red="0" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Start&lt;br/&gt;Lottery&lt;/center&gt;&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Start&lt;br/&gt;Lottery&lt;/center&gt;&lt;/html&gt;" noResource="true"/>
+                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[108, 52]"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStartLotteryActionPerformed"/>
