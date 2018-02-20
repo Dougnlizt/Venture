@@ -5,6 +5,7 @@
  */
 package org.tjcs.venture;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
 import java.nio.file.Path;
@@ -20,6 +21,8 @@ import javax.swing.JOptionPane;
  * @author dougthompson
  */
 public class Utilities {
+    public static Color LIGHT_GREEN_COLOR = new Color(0xBB, 0xED, 0xC3);
+    
     public enum Tier {
         CHILDREN_OF_EMPLOYEES_1(1, "Children of Employees and Founders"),
         SIBLINGS_IN_DISTRICT_2(2, "Applicants that reside in Vallivue School District with siblings currently enrolled in TJCS"),
@@ -217,6 +220,96 @@ public class Utilities {
         }
     }
     
+    public enum ColumnsExport {
+        LAST_NAME(0, "Last Name", "A", null, true),
+        FIRST_NAME(1, "First Name", "B", null, true),
+        TIER(2, "Tier", "C", null, true),
+        EMPTY_COL(3, "", "D", null, true),
+        LOTTERY_DRAW(4, "Lottery Draw", "E", null, true),
+        WAIT_LIST_NUMBER(5, "Waitlist Number", "F", null, true),
+        NOTES(6, "Notes", "G", 100, true),
+        ;
+        private int order;
+        private String columnName;
+        private String spreadsheetColumn;
+        private Integer numCharsForWidth;
+        private boolean fromSpreadsheet;
+
+        private ColumnsExport(int order, String columnName, String spreadsheetColumn, Integer numCharsForWidth, boolean fromSpreadsheet) {
+            this.order = order;
+            this.columnName = columnName;
+            this.spreadsheetColumn = spreadsheetColumn;
+            if (numCharsForWidth == null) {
+                this.numCharsForWidth = columnName.length();
+            } else {
+                this.numCharsForWidth = numCharsForWidth;
+            }
+            this.fromSpreadsheet = fromSpreadsheet;
+        }
+
+        public int getOrder() {
+            return order;
+        }
+
+        public String getColumnName() {
+            return columnName;
+        }
+
+        public String getSpreadsheetColumn() {
+            return spreadsheetColumn;
+        }
+
+        public void setSpreadsheetColumn(String spreadsheetColumn) {
+            this.spreadsheetColumn = spreadsheetColumn;
+        }        
+
+        public Integer getNumCharsForWidth() {
+            return numCharsForWidth;
+        }
+
+        public boolean isFromSpreadsheet() {
+            return fromSpreadsheet;
+        }
+        
+        public static ColumnsExport getColumn(int colNum) {
+            for (ColumnsExport value : ColumnsExport.values()) {
+                if (value.order == colNum) {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+        public static ColumnsExport getColumn(String colNum) {
+            if (colNum == null || colNum.trim().isEmpty()) return null;
+            int colNumber = -1;
+            try {
+                colNumber = Integer.parseInt(colNum.trim());
+            } catch (Exception ex) {
+                return null;
+            }
+            return getColumn(colNumber);
+        }
+        
+        public static String[] getColumnHeaders() {
+            String[] colHeaders = new String[ColumnsExport.values().length];
+            int i = 0;
+            for (ColumnsExport value : ColumnsExport.values()) {
+                colHeaders[i ++] = value.columnName;
+            }
+            return colHeaders;
+        }
+        
+        public static int getColumnIndex(ColumnsExport col) {
+            int colIndex = -1;
+            if (col.spreadsheetColumn != null) {
+                List<String> charArray = getSpreadsheetColumnLetters();
+                colIndex = charArray.indexOf(col.spreadsheetColumn);
+            }
+            return colIndex;
+        }
+    }
+    
     public static Path selectFile(Component parent, String fileName) {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -233,6 +326,33 @@ public class Utilities {
                 return null;
             case JFileChooser.ERROR_OPTION:
                 JOptionPane.showMessageDialog(parent, "There was an error", "Error Selecting File", JOptionPane.OK_OPTION);
+                return null;
+            case JFileChooser.APPROVE_OPTION:
+                break;
+        }
+        File fileItem = chooser.getSelectedFile();
+        Path newPath = fileItem.toPath();
+        
+        return newPath;
+        
+    }
+    
+    public static Path selectDir(Component parent, String fileName) {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        Path currPath = null;
+        if (fileName != null) {
+            currPath = Paths.get(fileName);
+        }
+        if (currPath != null) {
+            chooser.setCurrentDirectory(currPath.toFile());
+        }
+        int returnValue = chooser.showDialog(parent, "Select Export Destination Directory");
+        switch(returnValue) {
+            case JFileChooser.CANCEL_OPTION:
+                return null;
+            case JFileChooser.ERROR_OPTION:
+                JOptionPane.showMessageDialog(parent, "There was an error", "Error Selecting Directory", JOptionPane.OK_OPTION);
                 return null;
             case JFileChooser.APPROVE_OPTION:
                 break;

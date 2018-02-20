@@ -5,21 +5,28 @@
  */
 package org.tjcs.venture;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +42,19 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.tjcs.venture.Utilities.Columns;
+import org.tjcs.venture.Utilities.ColumnsExport;
 import org.tjcs.venture.Utilities.Grade;
 import org.tjcs.venture.Utilities.Tier;
 
@@ -135,6 +149,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButtonBrowseForDestination.setText("Browse");
+        jButtonBrowseForDestination.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBrowseForDestinationActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Master File");
 
@@ -155,6 +174,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         jButtonExport.setText("Export");
+        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportActionPerformed(evt);
+            }
+        });
 
         jButtonImportSettings.setText("...");
         jButtonImportSettings.setToolTipText("Modify Import Settings"); // NOI18N
@@ -164,7 +188,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        jLabelImportIssues.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jLabelImportIssues.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jLabelImportIssues.setForeground(new java.awt.Color(255, 0, 51));
         jLabelImportIssues.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelImportIssues.setText("!");
@@ -191,7 +215,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldDestination, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                     .addComponent(jTextFieldMasterFileSource))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -204,7 +228,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelImportIssues, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
@@ -266,6 +290,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("12th");
+        jLabel7.setOpaque(true);
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("11th");
@@ -532,12 +557,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel7)
                     .addComponent(jCheckBox12th)
                     .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel5)
                     .addComponent(jCheckBox11th)
@@ -598,7 +623,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jCheckBoxKinder)
                     .addComponent(jLabel18))
                 .addGap(11, 11, 11)
-                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -607,9 +632,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox12th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -627,7 +657,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCheckBox12th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCheckBox10th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCheckBox9th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCheckBox8th, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -644,7 +673,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                     .addComponent(jTextField6th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jTextField12th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextField11th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextField10th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextField9th, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -829,8 +857,16 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         runLottery();
     }//GEN-LAST:event_jButtonStartLotteryActionPerformed
 
+    private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
+        exportLotteryData();
+    }//GEN-LAST:event_jButtonExportActionPerformed
+
+    private void jButtonBrowseForDestinationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBrowseForDestinationActionPerformed
+        selectDestinationDir();
+    }//GEN-LAST:event_jButtonBrowseForDestinationActionPerformed
+
     /**
-     * @param args the command line arguments
+     * @param args the command line argument
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -954,6 +990,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private ImageIcon lotteryIcon = new ImageIcon(getClass().getClassLoader().getResource("images/lottery.png"));
     private long timeStamp = System.currentTimeMillis();
     private List<XSSFRow> problemRows;
+    public final static DateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
+    public final static DateFormat DATE_AND_TIME_FORMAT = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+    private double progress = 0.0;
     
     /**
      * Need to provide credits for the icon:
@@ -1001,12 +1040,23 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         loadSettings();
         
         rePopulateProspectiveStudents();
+        
+        jButtonStartLottery.setEnabled(false);
+        jButtonExport.setEnabled(false);
     }
     
     private void selectSourceFile() {
         Path sourceFile = Utilities.selectFile(this, jTextFieldMasterFileSource.getText());
         if (sourceFile != null) {
             jTextFieldMasterFileSource.setText(sourceFile.toString());
+            saveSettings();
+        }
+    }
+
+    private void selectDestinationDir() {
+        Path destinationDir = Utilities.selectDir(this, jTextFieldDestination.getText());
+        if (destinationDir != null) {
+            jTextFieldDestination.setText(destinationDir.toString());
             saveSettings();
         }
     }
@@ -1135,15 +1185,18 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                         if (prospectiveStudent == potentialSibling) {
                             continue;
                         }
-                        if (potentialSibling.getFamilyKey().equals(prospectiveStudent.getFamilyKey())) {
+                        if (potentialSibling.getFamilyKey().equalsIgnoreCase(prospectiveStudent.getFamilyKey())) {
                             prospectiveStudent.getSiblingsOnWaitlist().add(potentialSibling);
                         }
                     }
                 }
                 break;
             }
+            updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            jButtonStartLottery.setEnabled(true);
+            jButtonExport.setEnabled(false);
         } catch (Exception ex) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Problem loading the file:  " + ex.getMessage(), 
@@ -1155,7 +1208,175 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }
     
+    private void exportLotteryData() {
+        //If there are any grades where the lottery didn't run, show that as a warning before continuing.
+        int continueAnyway = -1;
+        
+        for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+            Grade key = entry.getKey();
+            Lottery value = entry.getValue();
+            if (!key.isLotteryComplete()) {
+                continueAnyway = JOptionPane.showConfirmDialog(this, "Not all grades have had the lottery done.  Export anyway??", "Incomplete Lottery", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (continueAnyway != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+        }
+        
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd");
+        String fileName = dtFormatter.format(LocalDateTime.now()) + " Lottery Results.xlsx";
+        String dirLocation = jTextFieldDestination.getText();
+        if (dirLocation != null) {
+            fileName = dirLocation + "/" + fileName;
+        }
+        File file = new File(fileName);
+        if (file.exists()) {
+            continueAnyway = JOptionPane.showConfirmDialog(this, "The destination file \n\n" + fileName + "\n\nalready exists.  Do you want to overwrite it?", "Export File Exists", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (continueAnyway != JOptionPane.YES_OPTION) {
+                return;
+            }
+        } else if (!file.getParentFile().canWrite()) {
+            JOptionPane.showMessageDialog(this, "The file destination is write protected... unable to generate output.\n\nSelect a different location"
+                    + " or make the location writeable.", "Output Write Protected", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            Workbook wb = new XSSFWorkbook();
+            CellStyle cellDateStyleDateTime = wb.createCellStyle();
+            CellStyle cellDateStyleDate = wb.createCellStyle();
+            CreationHelper createHelper = wb.getCreationHelper();
+            cellDateStyleDateTime.setDataFormat(createHelper.createDataFormat().getFormat("M/d/yyyy h:mm AM/PM"));
+            cellDateStyleDate.setDataFormat(createHelper.createDataFormat().getFormat("M/d/yyyy"));
+
+            Sheet sheet;
+            Row row;
+            sheet = wb.createSheet("Lottery Summary");
+            int rowCounter = 0;
+            row = sheet.createRow(rowCounter++);
+            row.createCell(0).setCellValue("Created By: TJCS '" + PROGRAM_NAME + "' Lottery Tool, Version " + PROGRAM_VERSION);
+
+            //String dateCreated = convertDateToString(LocalDateTime.now(), true);
+            row = sheet.createRow(rowCounter++);
+            setDateCell(row.createCell(0), LocalDateTime.now()).setCellStyle(cellDateStyleDateTime);
+            //row.createCell(0, cellDateStyleDateTime).setCellValue(dateCreated);
+            
+            //Maybe add # of total lottery participants, # of total seats available, break it down by tier
+                //Tier 1: 0
+                //Tier 2: 3
+                //...
+            int totalOpenSeats = 0;
+            int totalProspectiveStudents = 0;
+            for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                Grade grade = entry.getKey();
+                Lottery lottery = entry.getValue();
+                row = sheet.createRow(rowCounter++);
+                int numStudents = lottery.getAllStudents().size();
+                row.createCell(0).setCellValue(grade.getGradeDescription() + ": " + lottery.getOpenSeats() + " Seats, " + numStudents + " Prospective Students");
+                totalOpenSeats += lottery.getOpenSeats();
+                totalProspectiveStudents += numStudents;
+            }
+            row = sheet.createRow(rowCounter++);
+            row.createCell(0).setCellValue("Total Available Seats: " + totalOpenSeats + "; Total Prospective Students: " + totalProspectiveStudents);
+
+            row = sheet.createRow(rowCounter++);
+            row.createCell(0);
+            
+            setColumnWidth(sheet, 0, 30);
+            
+            //Last Name, First Name, Tier, Empty Column, Lottery Draw #, Wait List #, Notes
+            for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                Grade grade = entry.getKey();
+                Lottery lottery = entry.getValue();
+                sheet = wb.createSheet(grade.getGradeDescription());
+                row = sheet.createRow(0);
+                int colCount = 0;
+                row.createCell(colCount ++).setCellValue("Last Name");
+                row.createCell(colCount ++).setCellValue("First Name");
+                row.createCell(colCount ++).setCellValue("Tier");
+                row.createCell(colCount ++).setCellValue("X Column");
+                row.createCell(colCount ++).setCellValue("Lottery Draw");
+                row.createCell(colCount ++).setCellValue("Waitlist Number");
+                row.createCell(colCount ++).setCellValue("Notes");
+                Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = lottery.getTierPS_List();
+                rowCounter = 1;
+                int numSeats = lottery.getOpenSeats();
+                int maxWidthLastName = ColumnsExport.LAST_NAME.getNumCharsForWidth();
+                int maxWidthFirstName = ColumnsExport.FIRST_NAME.getNumCharsForWidth();
+                int widthLotteryDraw = ColumnsExport.LOTTERY_DRAW.getNumCharsForWidth();
+                int widthWaitList = ColumnsExport.WAIT_LIST_NUMBER.getNumCharsForWidth();
+                for (Tier tier : Tier.values()) {
+                    if (prospectiveStudentsTierMap.get(tier) == null) continue;
+                    for (ProspectiveStudent prospectiveStudent : prospectiveStudentsTierMap.get(tier)) { // value.getStudentsByTier(tier)) {
+                        colCount = 0;
+                        row = sheet.createRow(rowCounter++);
+                        maxWidthLastName = Math.max(maxWidthLastName, prospectiveStudent.getLastName().length());
+                        row.createCell(colCount ++).setCellValue(prospectiveStudent.getLastName());
+                        maxWidthFirstName = Math.max(maxWidthFirstName, prospectiveStudent.getFirstName().length());
+                        row.createCell(colCount ++).setCellValue(prospectiveStudent.getFirstName());
+                        row.createCell(colCount ++, CellType.NUMERIC).setCellValue(tier.getNumber());
+                        row.createCell(colCount ++, CellType.BLANK);
+                        row.createCell(colCount ++, CellType.NUMERIC).setCellValue(prospectiveStudent.getLotteryDrawNumber());
+                        if (numSeats - prospectiveStudent.getLotteryDrawNumber() < 0) {
+                            row.createCell(colCount ++, CellType.NUMERIC).setCellValue(prospectiveStudent.getLotteryDrawNumber() - numSeats);
+                        } else {
+                            row.createCell(colCount ++, CellType.BLANK);
+                        }
+                        row.createCell(colCount ++, CellType.BLANK);
+                    }
+                }
+                setColumnWidth(sheet, ColumnsExport.LAST_NAME.getOrder(), maxWidthLastName);
+                setColumnWidth(sheet, ColumnsExport.FIRST_NAME.getOrder(), maxWidthFirstName);
+                setColumnWidth(sheet, ColumnsExport.LOTTERY_DRAW.getOrder(), widthLotteryDraw);
+                setColumnWidth(sheet, ColumnsExport.WAIT_LIST_NUMBER.getOrder(), widthWaitList);
+                setColumnWidth(sheet, ColumnsExport.NOTES.getOrder(), ColumnsExport.NOTES.getNumCharsForWidth());
+            }
+            
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            wb.write(outputStream);
+            
+            //Write it out to a file
+            FileOutputStream fop = new FileOutputStream(file);
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                    file.createNewFile();
+            }
+            fop.write(outputStream.toByteArray());
+            fop.flush();
+            fop.close();
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(this, "Export complete at\n\n" + file.toString(), "Export Complete", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Problem exporting the file: " + ex.getMessage(), "Problem Writing the File", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
     
+    private void setColumnWidth(Sheet sheet, int colIndex, int numChars) {
+        sheet.setColumnWidth(colIndex, ((int) (numChars * 1.05))  * 256);
+    }
+    
+    private Cell setDateCell(Cell cell, LocalDateTime dateTimeObj) {
+        if (dateTimeObj != null) {
+            cell.setCellValue(toDateObject(dateTimeObj));
+        }
+        return cell;
+    }
+    
+    public Date toDateObject(LocalDateTime localDateTime) {
+        if (localDateTime == null) return null;
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    
+    public String convertDateToString(LocalDateTime date, boolean includeTime) {
+        if (date == null) return null;
+        if (includeTime) {
+            return DATE_AND_TIME_FORMAT.format(date);
+        } else {
+            return DATE_ONLY_FORMAT.format(date);
+        }
+    }
     
     public void resetCursor() {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1282,6 +1503,31 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         tierList.add(ps);
     }
     
+    /**
+     * This might need to be called if the tiers changed due to sibling modifications.  In fact, this
+     * should be run prior to the lottery shuffle for each grade.
+     * @param lottery 
+     */
+    private void rebuildTierList(Lottery lottery) {
+        List<ProspectiveStudent> tempList = new ArrayList<>();
+        for (Map.Entry<Tier, List<ProspectiveStudent>> entry : lottery.getTierPS_List().entrySet()) {
+            Tier key = entry.getKey();
+            List<ProspectiveStudent> value = entry.getValue();
+            tempList.addAll(value);
+            value.clear();
+        }
+        
+        for (ProspectiveStudent ps : tempList) {
+            List<ProspectiveStudent> tierList = lottery.getTierPS_List().get(ps.getTier());
+            if (tierList == null) {
+                tierList = new ArrayList<>();
+                lottery.getTierPS_List().put(ps.getTier(), tierList);
+            }
+            tierList.add(ps);
+        }
+        
+    }
+    
     private void runLottery() {
         //Need to start a runnable
         progress = 0.0;
@@ -1290,33 +1536,15 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         target.setLotteryFrame(this);
         Thread th = new Thread(target, "Lottery");
         th.start();
-//        int slowCounter = 0;
-//        while (th.isAlive() || slowCounter < 1) {
-//            try {
-//                progress = Math.min(progress, slowCounter / 20);
-//                //jButtonStartLottery.setText(String.format("%.1f", progress) + "%");
-//                Thread.sleep(500);
-//                slowCounter ++;
-//            } catch (InterruptedException ex) {
-//                //Ignore
-//            }
-//        }
-//        rePopulateProspectiveStudents();
+        jButtonExport.setEnabled(true);
     }
-    
-    public int continueOnAlreadyExists(Grade grade) {
-        int answer = JOptionPane.showConfirmDialog(this, "The " + grade.getGradeDescription()
-            + " grade has already had the lottery.  Do you really want to run it again?",
-            "Lottery Already Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        return answer;
-    }
-    
-    private double progress = 0.0;
     
     private class LotteryThread implements Runnable {
         
         LotteryFrame lotteryFrame;
         private NumberFormat percentCompleteFormat = NumberFormat.getPercentInstance();
+        private boolean skipFutureDialogs = false;
+        private int answer = -1;
 
         public void setLotteryFrame(LotteryFrame lotteryFrame) {
             this.lotteryFrame = lotteryFrame;
@@ -1341,17 +1569,28 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     continue;
                 }
                 if (grade.isLotteryComplete()) {
-                    int answer = continueOnAlreadyExists(grade);
-//                    int answer = JOptionPane.showConfirmDialog(lotteryFrame, "The " + grade.getGradeDescription()
-//                            + " grade has already had the lottery.  Do you really want to run it again?",
-//                            "Lottery Already Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (answer != JOptionPane.YES_OPTION) {
-                        continue;
+                    if (skipFutureDialogs) {
+                        if (answer != JOptionPane.YES_OPTION) {
+                            continue;
+                        }
+                    } else {
+                        //int answer = continueOnAlreadyExists(grade);
+                        JCheckBox checkbox = new JCheckBox("Use my selection for the rest of the grades.");
+                        String message = "The " + grade.getGradeDescription()
+                            + " grade has already had the lottery.  Do you really want to run it again?";
+                        Object[] params = {message, checkbox};
+                        answer = JOptionPane.showConfirmDialog(null, params,
+                            "Lottery Already Exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        skipFutureDialogs = checkbox.isSelected();
+                        if (answer != JOptionPane.YES_OPTION) {
+                            continue;
+                        }
                     }
                 }
                 Lottery value = entry.getValue();
                 int numSeats = value.getOpenSeats();
                 int lotteryDrawCounter = 1;
+                rebuildTierList(value);
                 Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = value.getTierPS_List();
                 for (Tier tier : Tier.values()) {
                     if (prospectiveStudentsTierMap.get(tier) == null) continue;
@@ -1359,6 +1598,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     List<ProspectiveStudent> prospectiveStudentsList = prospectiveStudentsTierMap.get(tier);
                     Collections.shuffle(prospectiveStudentsList);
                     for (ProspectiveStudent prospectiveStudent : prospectiveStudentsList) {
+                        //Need to do this if the lottery is being run again
+                        prospectiveStudent.setAvailableSeatOffered(false);
                         studentCounter ++;
                         progress = (double) studentCounter / (double) numStudents;
                         prospectiveStudent.setLotteryDrawNumber(lotteryDrawCounter++);
@@ -1407,23 +1648,39 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                         updateProgressOutput();
                     }
                 }
-
                 grade.setLotteryComplete(true);
             }
+            updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
             jButtonStartLottery.setText(originalButtonText);
             lotteryFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(null, "Lottery Complete!", "Finished", JOptionPane.INFORMATION_MESSAGE);
         }        
         
         private void updateProgressOutput() {
             try {
-                Thread.sleep(2);
+                Thread.sleep(0, 50);
             } catch (InterruptedException ex) {
                 Logger.getLogger(LotteryFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             //progress = Math.min(progress, slowCounter / 20);
 
             jButtonStartLottery.setText(percentCompleteFormat.format(progress));
+        }
+    }
+    
+    private void updateCheckboxBackgrounds() {
+        for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
+            Grade grade = entry.getKey();
+            JCheckBox checkboxObj = entry.getValue();
+            if (grade.isLotteryComplete()) {
+                //checkboxObj.setBackground(new Color(0xEE, 0xC8, 0x48));
+                checkboxObj.setBackground(Utilities.LIGHT_GREEN_COLOR);
+                checkboxObj.setOpaque(true);
+            } else {
+                checkboxObj.setBackground(new Color(0xCC, 0xD0, 0xD8));
+                checkboxObj.setOpaque(true);
+            }
         }
     }
     

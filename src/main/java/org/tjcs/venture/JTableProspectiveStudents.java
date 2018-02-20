@@ -48,8 +48,8 @@ public class JTableProspectiveStudents extends JTable {
     private int maxOptionWidth = 0;
     private final Color evenRowBG = new Color(0xFF, 0xFF, 0xFF);
     private final Color oddRowBG = new Color(0xEE, 0xEE, 0xEE);
-    private final Color wonLotteryBG = new Color(0xBB, 0xED, 0xC3);
     private final Font fontBold = new Font(null, Font.BOLD, 12);
+    private boolean allowClassColumnSorting = true;
 
     @SuppressWarnings("unchecked")
     private List<ActionListener> listeners = Collections.synchronizedList(new LinkedList());
@@ -84,6 +84,14 @@ public class JTableProspectiveStudents extends JTable {
         return tableHeaderRow;
     }
 
+    public boolean isAllowClassColumnSorting() {
+        return allowClassColumnSorting;
+    }
+
+    public void setAllowClassColumnSorting(boolean allowClassColumnSorting) {
+        this.allowClassColumnSorting = allowClassColumnSorting;
+    }
+
     @Override
     public boolean isFocusable() {
         return false;
@@ -101,6 +109,23 @@ public class JTableProspectiveStudents extends JTable {
 //            return getValueAt(0, c).getClass();
 //        }
 //
+        /**
+         * This allows sorting to occur for columns depending on their class type (i.e. int).
+         * Otherwise, it sorts ints by strings instead (resulting in 1,2,3...10,11 instead
+         * of 1,10,11,2,3...)
+         * @param columnIndex
+         * @return 
+         */
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (!allowClassColumnSorting
+                    || recordCellArray == null
+                    || recordCellArray.length == 0) {
+                return Object.class;
+            }
+            return getValueAt(0, columnIndex).getClass();
+        }
+
         @Override
         public int getRowCount() {
             if (recordCellArray == null) {
@@ -125,6 +150,19 @@ public class JTableProspectiveStudents extends JTable {
             if (recordCellArray == null || rowIndex > recordCellArray.length - 1) {
                 return null;
             } else {
+                Columns col = Columns.getColumn(columnIndex);
+                DB_RecordCell cellObj = (DB_RecordCell) recordCellArray[rowIndex][columnIndex];
+                if (col == Columns.GRADE
+                        || col == Columns.LOTTERY_DRAW
+                        || col == Columns.TIER
+                        || col == Columns.WAIT_LIST_SIBLINGS) {
+                    String value = cellObj.toString();
+                    try {
+                        return Integer.parseInt(value);
+                    } catch (Exception ex) {
+                        return value;
+                    }
+                }
                 return recordCellArray[rowIndex][columnIndex];
             }
         }
@@ -184,8 +222,10 @@ public class JTableProspectiveStudents extends JTable {
                 Component comp = renderer.getTableCellRendererComponent(this, getValueAt(r, 0),
                     false, false, r, 0);
                 cellWidth = Math.max(cellWidth, comp.getPreferredSize().width);
-                if (((DB_RecordCell) getValueAt(r, 0)).getValue() != null) {
-                    maxOptionWidth = Math.max(maxOptionWidth, ((DB_RecordCell) getValueAt(r, 0)).getValue().length());
+                Object cellVal = getValueAt(r, 0);
+                if (cellVal instanceof DB_RecordCell
+                        && ((DB_RecordCell) cellVal).getValue() != null) {
+                    maxOptionWidth = Math.max(maxOptionWidth, ((DB_RecordCell) cellVal).getValue().length());
                 }
             }
             colWidth = cellWidth + 4;
@@ -311,7 +351,7 @@ public class JTableProspectiveStudents extends JTable {
                 Color bgColor = null;
                 if (recordCell.getProspectiveStudent() != null
                         && recordCell.getProspectiveStudent().isAvailableSeatOffered()) {
-                    bgColor = wonLotteryBG;
+                    bgColor = Utilities.LIGHT_GREEN_COLOR;
                     setBackground(bgColor);
                 } else {
                     bgColor = (row % 2 == 0) ? evenRowBG : oddRowBG;

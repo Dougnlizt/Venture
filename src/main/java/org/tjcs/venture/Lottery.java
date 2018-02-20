@@ -59,4 +59,13 @@ public class Lottery {
         return new ArrayList<>();
     }
     
+    public List<ProspectiveStudent> getAllStudents() {
+        List<ProspectiveStudent> tempList = new ArrayList<>();
+        for (Map.Entry<Tier, List<ProspectiveStudent>> entry : tierPS_List.entrySet()) {
+            tempList.addAll(entry.getValue());
+        }
+        return tempList;
+        
+    }
+    
 }
