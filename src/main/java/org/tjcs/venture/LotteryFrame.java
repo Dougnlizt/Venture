@@ -145,6 +145,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabelNumRecords = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuFile = new javax.swing.JMenu();
+        jMenuItemExit = new javax.swing.JMenuItem();
+        jMenuHelp = new javax.swing.JMenu();
+        jMenuItemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -756,9 +761,30 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel22)
                     .addComponent(jLabelNumRecords))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneProspectiveStudents, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                .addComponent(jScrollPaneProspectiveStudents, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jMenuFile.setText("File");
+
+        jMenuItemExit.setText("Exit");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemExit);
+
+        jMenuBar1.add(jMenuFile);
+
+        jMenuHelp.setText("Help");
+
+        jMenuItemAbout.setText("About");
+        jMenuHelp.add(jMenuItemAbout);
+
+        jMenuBar1.add(jMenuHelp);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -865,6 +891,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         selectDestinationDir();
     }//GEN-LAST:event_jButtonBrowseForDestinationActionPerformed
 
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
+
     /**
      * @param args the command line argument
      */
@@ -946,6 +976,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabelImportIssues;
     private javax.swing.JLabel jLabelNumRecords;
     private javax.swing.JLabel jLabelSelectAllGrades;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
@@ -993,6 +1028,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     public final static DateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
     public final static DateFormat DATE_AND_TIME_FORMAT = new SimpleDateFormat("MM/dd/yyyy h:mm a");
     private double progress = 0.0;
+    private boolean lotteryStarted = false;
+    private boolean lotteryExported = false;
+    private boolean allGradesComplete = false;
     
     /**
      * Need to provide credits for the icon:
@@ -1088,12 +1126,19 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }
     
     private void loadSpreadsheet() {
-        //getSpreadsheetData();
-        jLabelImportIssues.setVisible(false);
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        gradeLotteryMap = new TreeMap<>();
-        List<XSSFRow> validRows = new ArrayList<>();
-        problemRows = new ArrayList<>();
+        if (lotteryStarted) {
+            int wannaContinue = -1;
+            if (lotteryExported) {
+                wannaContinue = JOptionPane.showConfirmDialog(this, "The lottery results have been saved, but any existing lottery information shown here will be lost.\n\nAre you "
+                        + "sure you want to reload the prospective student data from the spreadsheet?", "Reload Spreadsheet", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            } else {
+                wannaContinue = JOptionPane.showConfirmDialog(this, "Results not saved!!  Are you sure you want to reload the data\n\nand "
+                        + "lose all lottery data?", "Reload Spreadsheet", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+            if (wannaContinue != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
         
         String filename = jTextFieldMasterFileSource.getText();
         
@@ -1105,6 +1150,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             return;
         }
                 
+        lotteryExported = false;
+        lotteryStarted = false;
+        allGradesComplete = false;
+        jLabelImportIssues.setVisible(false);
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        gradeLotteryMap = new TreeMap<>();
+        List<XSSFRow> validRows = new ArrayList<>();
+        problemRows = new ArrayList<>();
         int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
         int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
         int tierColIndex = Columns.getColumnIndex(Columns.TIER);
@@ -1212,14 +1265,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         //If there are any grades where the lottery didn't run, show that as a warning before continuing.
         int continueAnyway = -1;
         
-        for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
-            Grade key = entry.getKey();
-            Lottery value = entry.getValue();
-            if (!key.isLotteryComplete()) {
-                continueAnyway = JOptionPane.showConfirmDialog(this, "Not all grades have had the lottery done.  Export anyway??", "Incomplete Lottery", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (continueAnyway != JOptionPane.YES_OPTION) {
-                    return;
-                }
+        if (!isLotteryComplete()) {
+            continueAnyway = JOptionPane.showConfirmDialog(this, "Not all grades have had the lottery done.  Export anyway??", "Incomplete Lottery", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (continueAnyway != JOptionPane.YES_OPTION) {
+                return;
             }
         }
         
@@ -1253,12 +1302,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             Sheet sheet;
             Row row;
             sheet = wb.createSheet("Lottery Summary");
-            int rowCounter = 0;
-            row = sheet.createRow(rowCounter++);
+            int rowIndex = 0;
+            row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue("Created By: TJCS '" + PROGRAM_NAME + "' Lottery Tool, Version " + PROGRAM_VERSION);
 
             //String dateCreated = convertDateToString(LocalDateTime.now(), true);
-            row = sheet.createRow(rowCounter++);
+            row = sheet.createRow(rowIndex++);
             setDateCell(row.createCell(0), LocalDateTime.now()).setCellStyle(cellDateStyleDateTime);
             //row.createCell(0, cellDateStyleDateTime).setCellValue(dateCreated);
             
@@ -1268,22 +1317,60 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 //...
             int totalOpenSeats = 0;
             int totalProspectiveStudents = 0;
+            List<ProspectiveStudent> studentTiersUpgraded = new ArrayList<>();
             for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
                 Grade grade = entry.getKey();
                 Lottery lottery = entry.getValue();
-                row = sheet.createRow(rowCounter++);
+                row = sheet.createRow(rowIndex++);
                 int numStudents = lottery.getAllStudents().size();
                 row.createCell(0).setCellValue(grade.getGradeDescription() + ": " + lottery.getOpenSeats() + " Seats, " + numStudents + " Prospective Students");
                 totalOpenSeats += lottery.getOpenSeats();
                 totalProspectiveStudents += numStudents;
+                for (ProspectiveStudent allStudent : lottery.getAllStudents()) {
+                    if (allStudent.getOldTier() != null) {
+                        studentTiersUpgraded.add(allStudent);
+                    }
+                }
             }
-            row = sheet.createRow(rowCounter++);
+            row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue("Total Available Seats: " + totalOpenSeats + "; Total Prospective Students: " + totalProspectiveStudents);
+            row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue("Number of students whose tier level increased: " + studentTiersUpgraded.size());
 
-            row = sheet.createRow(rowCounter++);
+            row = sheet.createRow(rowIndex++);
             row.createCell(0);
             
             setColumnWidth(sheet, 0, 30);
+            
+            //Tier Increase Students
+            sheet = wb.createSheet("Tier Changes");
+            rowIndex = 0;
+            row = sheet.createRow(rowIndex++);
+            int colIndex = 0;
+            row.createCell(colIndex ++).setCellValue("Last Name");
+            row.createCell(colIndex ++).setCellValue("First Name");
+            row.createCell(colIndex ++).setCellValue("Grade");
+            row.createCell(colIndex ++).setCellValue("Old Tier");
+            row.createCell(colIndex ++).setCellValue("New Tier");
+            row.createCell(colIndex ++).setCellValue("Made Lottery");
+            
+            int maxWidthLastName = ColumnsExport.LAST_NAME.getNumCharsForWidth();
+            int maxWidthFirstName = ColumnsExport.FIRST_NAME.getNumCharsForWidth();
+
+            for (ProspectiveStudent prospectiveStudent : studentTiersUpgraded) {
+                colIndex = 0;
+                row = sheet.createRow(rowIndex++);
+                maxWidthLastName = Math.max(maxWidthLastName, prospectiveStudent.getLastName().length());
+                row.createCell(colIndex ++).setCellValue(prospectiveStudent.getLastName());
+                maxWidthFirstName = Math.max(maxWidthFirstName, prospectiveStudent.getFirstName().length());
+                row.createCell(colIndex ++).setCellValue(prospectiveStudent.getFirstName());
+                row.createCell(colIndex ++).setCellValue(prospectiveStudent.getGrade().getGradeDescription());
+                row.createCell(colIndex ++, CellType.NUMERIC).setCellValue(prospectiveStudent.getOldTier().getNumber());
+                row.createCell(colIndex ++, CellType.NUMERIC).setCellValue(prospectiveStudent.getTier().getNumber());           
+                row.createCell(colIndex ++, CellType.BOOLEAN).setCellValue(prospectiveStudent.isAvailableSeatOffered());
+            }
+            setColumnWidth(sheet, ColumnsExport.LAST_NAME.getOrder(), maxWidthLastName);
+            setColumnWidth(sheet, ColumnsExport.FIRST_NAME.getOrder(), maxWidthFirstName);
             
             //Last Name, First Name, Tier, Empty Column, Lottery Draw #, Wait List #, Notes
             for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
@@ -1300,17 +1387,17 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 row.createCell(colCount ++).setCellValue("Waitlist Number");
                 row.createCell(colCount ++).setCellValue("Notes");
                 Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = lottery.getTierPS_List();
-                rowCounter = 1;
+                rowIndex = 1;
                 int numSeats = lottery.getOpenSeats();
-                int maxWidthLastName = ColumnsExport.LAST_NAME.getNumCharsForWidth();
-                int maxWidthFirstName = ColumnsExport.FIRST_NAME.getNumCharsForWidth();
+                maxWidthLastName = ColumnsExport.LAST_NAME.getNumCharsForWidth();
+                maxWidthFirstName = ColumnsExport.FIRST_NAME.getNumCharsForWidth();
                 int widthLotteryDraw = ColumnsExport.LOTTERY_DRAW.getNumCharsForWidth();
                 int widthWaitList = ColumnsExport.WAIT_LIST_NUMBER.getNumCharsForWidth();
                 for (Tier tier : Tier.values()) {
                     if (prospectiveStudentsTierMap.get(tier) == null) continue;
                     for (ProspectiveStudent prospectiveStudent : prospectiveStudentsTierMap.get(tier)) { // value.getStudentsByTier(tier)) {
                         colCount = 0;
-                        row = sheet.createRow(rowCounter++);
+                        row = sheet.createRow(rowIndex++);
                         maxWidthLastName = Math.max(maxWidthLastName, prospectiveStudent.getLastName().length());
                         row.createCell(colCount ++).setCellValue(prospectiveStudent.getLastName());
                         maxWidthFirstName = Math.max(maxWidthFirstName, prospectiveStudent.getFirstName().length());
@@ -1345,12 +1432,27 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             fop.write(outputStream.toByteArray());
             fop.flush();
             fop.close();
+            lotteryExported = true;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Export complete at\n\n" + file.toString(), "Export Complete", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Problem exporting the file: " + ex.getMessage(), "Problem Writing the File", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
+    }
+    
+    private boolean isLotteryComplete() {
+        boolean lotteryComplete = false;
+        for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+            lotteryComplete = true;
+            Grade key = entry.getKey();
+            //Lottery value = entry.getValue();
+            if (!key.isLotteryComplete()) {
+                lotteryComplete = false;
+                break;
+            }
+        }
+        return lotteryComplete;
     }
     
     private void setColumnWidth(Sheet sheet, int colIndex, int numChars) {
@@ -1531,6 +1633,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private void runLottery() {
         //Need to start a runnable
         progress = 0.0;
+        lotteryStarted = true;
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         LotteryThread target = new LotteryThread();
         target.setLotteryFrame(this);
@@ -1563,6 +1666,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             int numStudents = getLotteryStudents(true).size();
             int studentCounter = 0;
             percentCompleteFormat.setMaximumFractionDigits(0);
+            List<ProspectiveStudent> newTierList = new ArrayList<>();
             for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
                 Grade grade = entry.getKey();
                 if (!isGradeChecked(grade)) {
@@ -1637,8 +1741,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             if (newTier.getNumber() > -1) {
                                 for (ProspectiveStudent sibling : prospectiveStudent.getSiblingsOnWaitlist()) {
                                     //Need to bump a tier
-                                    if (newTier.getNumber() < sibling.getTier().getNumber()) {
+                                    if (newTier.getNumber() < sibling.getTier().getNumber()
+                                            && sibling.getGrade().getNumber() < grade.getNumber()) {
+                                        sibling.setOldTier(sibling.getTier());
                                         sibling.setTier(newTier);
+                                        newTierList.add(sibling);
                                     } else if (newTier.getNumber() > sibling.getTier().getNumber()) {
                                         //DT:  This shouldn't happen...
                                     }
@@ -1650,11 +1757,16 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 }
                 grade.setLotteryComplete(true);
             }
+            lotteryFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
+            SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(null, true);
+            siblingsUpdateDialog.setTierChangeList(newTierList);
+            siblingsUpdateDialog.buildTable();
+            siblingsUpdateDialog.setLocationRelativeTo(lotteryFrame);
+            siblingsUpdateDialog.setVisible(true);
+            //JOptionPane.showMessageDialog(null, "Lottery Complete!", "Finished", JOptionPane.INFORMATION_MESSAGE);
             jButtonStartLottery.setText(originalButtonText);
-            lotteryFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            JOptionPane.showMessageDialog(null, "Lottery Complete!", "Finished", JOptionPane.INFORMATION_MESSAGE);
         }        
         
         private void updateProgressOutput() {
@@ -1879,7 +1991,21 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     protected void processWindowEvent(WindowEvent e) {
         switch(e.getID()) {
             case WindowEvent.WINDOW_CLOSING:
-                //closeWindow();
+                //If not exported/saved the data, ask are you sure
+                if (lotteryStarted && !lotteryExported) {
+                    int keepExiting = JOptionPane.showConfirmDialog(this, "Lottery information not saved.  Do you wish to exit anyway?",
+                            "Lottery Not Saved", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (keepExiting != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+                if (lotteryStarted && !isLotteryComplete()) {
+                    int keepExiting = JOptionPane.showConfirmDialog(this, "The lottery isn't finished... Do you wish to exit anyway?",
+                            "Lottery Not Complete", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (keepExiting != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 System.exit(0);
                 break;
             case WindowEvent.WINDOW_ACTIVATED:

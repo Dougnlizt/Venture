@@ -24,6 +24,7 @@ public class ProspectiveStudent {
     private String lastName;
     private String firstName;
     private Tier tier;
+    private Tier oldTier;
     private String familyKey;
     private Grade grade;
     private XSSFRow rowFromSpreadsheet;
@@ -57,6 +58,14 @@ public class ProspectiveStudent {
         this.tier = tier;
     }
 
+    public Tier getOldTier() {
+        return oldTier;
+    }
+
+    public void setOldTier(Tier oldTier) {
+        this.oldTier = oldTier;
+    }
+    
     public String getFamilyKey() {
         return familyKey;
     }
