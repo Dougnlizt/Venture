@@ -1826,6 +1826,22 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }
     
     private void runLottery() {
+        //Update the lottery number of seats
+        for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+            Grade grade = entry.getKey();
+            Lottery lottery = entry.getValue();
+            String numSeatsStr = gradeAvailableSeatsMap.get(grade).getText();
+            try {
+                int numSeats = Integer.parseInt(numSeatsStr.trim());
+                lottery.setOpenSeats(numSeats);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The number of seats value '" + numSeatsStr.trim() + "' for the " + grade.getGradeDescription() + " grade should be a whole number.", 
+                    "Issue Starting Lottery", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        saveSettings();
+
         //Need to start a runnable
         progress = 0.0;
         lotteryStarted = true;
@@ -1898,6 +1914,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     Collections.shuffle(prospectiveStudentsList);
                     for (ProspectiveStudent prospectiveStudent : prospectiveStudentsList) {
                         //Need to do this if the lottery is being run again
+
                         prospectiveStudent.setAvailableSeatOffered(false);
                         studentCounter ++;
                         progress = (double) studentCounter / (double) numStudents;

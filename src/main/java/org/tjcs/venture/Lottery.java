@@ -19,7 +19,7 @@ import org.tjcs.venture.Utilities.Tier;
  */
 public class Lottery {
     private final Grade grade;
-    private final int openSeats;
+    private int openSeats;
     private List<ProspectiveStudent> studentsAddedToClass = new ArrayList<>();
     private List<ProspectiveStudent> studentsOnWaitList = new ArrayList<>();
     private Map<Tier, List<ProspectiveStudent>> tierPS_List = new TreeMap<>();
@@ -35,6 +35,10 @@ public class Lottery {
 
     public int getOpenSeats() {
         return openSeats;
+    }
+
+    public void setOpenSeats(int openSeats) {
+        this.openSeats = openSeats;
     }
 
     public List<ProspectiveStudent> getStudentsAddedToClass() {
