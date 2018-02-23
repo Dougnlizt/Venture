@@ -16,7 +16,7 @@ import org.tjcs.venture.Utilities.Tier;
  *
  * @author dougthompson
  */
-public class ProspectiveStudent {
+public class ProspectiveStudent implements Comparable<ProspectiveStudent> {
     private int LotteryDrawNumber = -1;
     private boolean availableSeatOffered = false;
     private boolean changeInTier;
@@ -112,7 +112,18 @@ public class ProspectiveStudent {
     public String toString() {
         return lastName + ", " + firstName;
     }
-    
-    
+
+    @Override
+    public int compareTo(ProspectiveStudent o) {
+        //First by grade, then last name, then first name
+        int compareVal = this.grade.compareTo(o.grade);
+        if (compareVal == 0) {
+            compareVal = this.lastName.compareTo(o.lastName);
+            if (compareVal == 0) {
+                compareVal = this.firstName.compareTo(o.firstName);
+            }
+        }
+        return compareVal;
+    }
     
 }

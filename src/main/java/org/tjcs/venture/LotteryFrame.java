@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -1046,6 +1047,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private ImageIcon lotteryIcon = new ImageIcon(getClass().getClassLoader().getResource("images/lottery.png"));
     private long timeStamp = System.currentTimeMillis();
     private List<XSSFRow> problemRows;
+    private Map<XSSFRow, String> problemRowsMap;
     public final static DateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
     public final static DateFormat DATE_AND_TIME_FORMAT = new SimpleDateFormat("MM/dd/yyyy h:mm a");
     private double progress = 0.0;
@@ -1150,6 +1152,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         ImportIssuesDialog importIssuesDialog = new ImportIssuesDialog(this, true);
         importIssuesDialog.setLocationRelativeTo(this);
         importIssuesDialog.setProblemRows(problemRows);
+        importIssuesDialog.setProblemRowsMap(problemRowsMap);
         importIssuesDialog.buildTable();
         importIssuesDialog.setVisible(true);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1188,6 +1191,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         gradeLotteryMap = new TreeMap<>();
         List<XSSFRow> validRows = new ArrayList<>();
         problemRows = new ArrayList<>();
+        problemRowsMap = new TreeMap<>();
         extraColumns = new TreeMap<>();
         int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
         int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
@@ -1247,6 +1251,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     boolean tierColIsNumeric = false;
                     boolean gradeColIsNumeric = false;
                     if (tierCol == null && gradeCol == null) {
+                        problemRowsMap.put(row, "Tier/Grade");
                         problemRows.add(row);
                         continue;
                     }
@@ -1256,15 +1261,55 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     if (tierColIsNumeric && gradeColIsNumeric) {
                         validRows.add(row);
                     } else {
+                        String reason = "Tier/Grade";
+                        if (tierColIsNumeric && !gradeColIsNumeric) {
+                            reason = "Grade";
+                        } else if (!tierColIsNumeric && gradeColIsNumeric) {
+                            reason = "Tier";
+                        }
+                        problemRowsMap.put(row, reason);
                         problemRows.add(row);
                     }
                 }
-                for (XSSFRow row : validRows) {
-                    addToLottery(new ProspectiveStudent(row, row.getCell(lastNameColIndex).getStringCellValue(),
+                
+                List<XSSFRow> duplicateRowsList = new ArrayList<>();
+
+                for (Iterator<XSSFRow> iterator = validRows.iterator(); iterator.hasNext();) {
+                    XSSFRow row = iterator.next();
+                    for (XSSFRow validRow : validRows) {
+                        if (validRow == row) continue;
+                        if (row.getCell(lastNameColIndex).getStringCellValue()
+                                    .equalsIgnoreCase(validRow.getCell(lastNameColIndex).getStringCellValue())
+                                && row.getCell(firstNameColIndex).getStringCellValue()
+                                    .equalsIgnoreCase(validRow.getCell(firstNameColIndex).getStringCellValue())
+                                && Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue())
+                                    == Grade.getGrade((int) validRow.getCell(gradeColIndex).getNumericCellValue())) {
+                            if (!duplicateRowsList.contains(row)) {
+                                duplicateRowsList.add(row);
+                            }
+                            if (!duplicateRowsList.contains(validRow)) {
+                                duplicateRowsList.add(validRow);
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                //for (XSSFRow row : validRows) {
+                for (Iterator<XSSFRow> iterator = validRows.iterator(); iterator.hasNext();) {
+                    XSSFRow row = iterator.next();
+                    if (duplicateRowsList.contains(row)) {
+                        iterator.remove();
+                        problemRowsMap.put(row, "Duplicate");
+                        problemRows.add(row);
+                        continue;
+                    }
+                    ProspectiveStudent prospectiveStudent = new ProspectiveStudent(row, row.getCell(lastNameColIndex).getStringCellValue(),
                                 row.getCell(firstNameColIndex).getStringCellValue(),
                                 Tier.getTier((int) row.getCell(tierColIndex).getNumericCellValue()),
                                 row.getCell(familyKeyColIndex).getStringCellValue(),
-                                Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue())));
+                                Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue()));
+                    addToLottery(prospectiveStudent);
                 }
                 //Need to set the siblings based on the family key
                 List<ProspectiveStudent> tempList = new ArrayList<>();
@@ -1304,7 +1349,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Problem loading the file:  " + ex.getMessage(), 
                     "Issue Loading Master File", JOptionPane.ERROR_MESSAGE);
         }
-        if (!problemRows.isEmpty()) {
+        if (!problemRowsMap.isEmpty()) {
             jLabelImportIssues.setVisible(true);
             showProblemRows();
         }
@@ -1858,12 +1903,15 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             lotteryFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
-            SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(null, true);
-            siblingsUpdateDialog.setTierChangeList(newTierList);
-            siblingsUpdateDialog.buildTable();
-            siblingsUpdateDialog.setLocationRelativeTo(lotteryFrame);
-            siblingsUpdateDialog.setVisible(true);
-            //JOptionPane.showMessageDialog(null, "Lottery Complete!", "Finished", JOptionPane.INFORMATION_MESSAGE);
+            if (!newTierList.isEmpty()) {
+                SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(null, true);
+                siblingsUpdateDialog.setTierChangeList(newTierList);
+                siblingsUpdateDialog.buildTable();
+                siblingsUpdateDialog.setLocationRelativeTo(lotteryFrame);
+                siblingsUpdateDialog.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Done!!", "Finished", JOptionPane.INFORMATION_MESSAGE);
+            }
             jButtonStartLottery.setText(originalButtonText);
         }        
         

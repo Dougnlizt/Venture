@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -165,6 +166,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
     
     private final LotteryFrame parentFrame;
     List<XSSFRow> problemRows = new ArrayList<>();
+    Map<XSSFRow, String> problemRowsMap = new TreeMap<>();
 
     private void initMyComponents() {
         //buildTable();
@@ -177,6 +179,10 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
     public void setProblemRows(List<XSSFRow> problemRows) {
         this.problemRows = problemRows;
     }
+
+    public void setProblemRowsMap(Map<XSSFRow, String> problemRowsMap) {
+        this.problemRowsMap = problemRowsMap;
+    }
     
     public void buildTable() {
         List<DB_RecordCell> dbRecordCellList = new ArrayList<>();
@@ -188,7 +194,8 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.TIER.getColumnName(),
                                             Columns.GRADE.getColumnName(),
-                                            Columns.FAMILY_KEY.getColumnName()};
+                                            Columns.FAMILY_KEY.getColumnName(),
+                                            "Reason"};
 
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         
@@ -200,7 +207,10 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         
         int rowCounter = 0;
         
-        for (XSSFRow row : problemRows) {
+        for (Map.Entry<XSSFRow, String> entry : problemRowsMap.entrySet()) {
+            XSSFRow row = entry.getKey();
+            String reason = entry.getValue();
+        //for (XSSFRow row : problemRows) {
             int colCounter = 0;
             DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(row.getRowNum() + 1), rowCounter, colCounter);
             dbRecordCellList.add(tempCell);
@@ -214,16 +224,18 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
             dbRecordCellList.add(tempCell);
             tempCell = getCellValue(row, familyKeyColIndex, rowCounter, colCounter++);
             dbRecordCellList.add(tempCell);
+            tempCell = new DB_RecordCell(reason, rowCounter, colCounter++);
+            dbRecordCellList.add(tempCell);
             rowCounter++;
         }
         
-        Object[][] tableItems = new Object[rowCounter][6];
+        Object[][] tableItems = new Object[rowCounter][headerCols.length];
         
         rowCounter = 0;
         int colCounter = 0;
         for (DB_RecordCell dB_RecordCell : dbRecordCellList) {
             tableItems[rowCounter][colCounter++] = dB_RecordCell;
-            if (colCounter > 5) {
+            if (colCounter > headerCols.length - 1) {
                 rowCounter ++;
                 colCounter = 0;
             }

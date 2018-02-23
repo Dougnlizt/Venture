@@ -7,6 +7,7 @@ package org.tjcs.venture;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.tjcs.venture.Utilities.Columns;
 
@@ -38,7 +39,7 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         jTableInvalidRecords = new javax.swing.JTable();
         jButtonOK = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jTextPaneDescription = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -66,14 +67,14 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        jTextPane1.setEditable(false);
-        jTextPane1.setBorder(null);
-        jTextPane1.setText("The following are a list of those siblings who had their tiers updated because of siblings in older grades who were selected for their grade."); // NOI18N
-        jTextPane1.setDragEnabled(false);
-        jTextPane1.setFocusable(false);
-        jTextPane1.setOpaque(false);
-        jTextPane1.setRequestFocusEnabled(false);
-        jScrollPane2.setViewportView(jTextPane1);
+        jTextPaneDescription.setEditable(false);
+        jTextPaneDescription.setBorder(null);
+        jTextPaneDescription.setText("The following are a list of those siblings who had their tiers updated because of siblings in older grades who were selected for their grade."); // NOI18N
+        jTextPaneDescription.setDragEnabled(false);
+        jTextPaneDescription.setFocusable(false);
+        jTextPaneDescription.setOpaque(false);
+        jTextPaneDescription.setRequestFocusEnabled(false);
+        jScrollPane2.setViewportView(jTextPaneDescription);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,7 +157,7 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPaneInvalidRecords;
     private javax.swing.JTable jTableInvalidRecords;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPaneDescription;
     // End of variables declaration//GEN-END:variables
     
     private List<ProspectiveStudent> tierChangeList = new ArrayList<>();
@@ -164,13 +165,12 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
     private void initMyComponents() {
         //buildTable();
         this.setTitle("Siblings With Tier Changes");
-        //jTextPane1.setOpaque(false);
-        //jTextPane1.setBorder(BorderFactory.createEmptyBorder());
-        jTextPane1.setBackground(new Color(0,0,0,0));
+        jTextPaneDescription.setBackground(new Color(0,0,0,0));
     }
 
     public void setTierChangeList(List<ProspectiveStudent> tierChangeList) {
         this.tierChangeList = tierChangeList;
+        Collections.sort(this.tierChangeList);
     }
     
     public void buildTable() {
@@ -230,7 +230,12 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         prospectiveStudentsTable.initTable();
         prospectiveStudentsTable.applyFilter(null, false);
-        jScrollPaneInvalidRecords.setViewportView(prospectiveStudentsTable);
+        if (tierChangeList.isEmpty()) {
+            jScrollPaneInvalidRecords.setVisible(false);
+            jTextPaneDescription.setText("No Siblings Updated");
+        } else {
+            jScrollPaneInvalidRecords.setViewportView(prospectiveStudentsTable);
+        }
     }
     
     @Override
