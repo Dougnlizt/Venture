@@ -16,15 +16,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
@@ -150,7 +146,8 @@ public class JTableProspectiveStudents extends JTable {
             if (recordCellArray == null || rowIndex > recordCellArray.length - 1) {
                 return null;
             } else {
-                Columns col = Columns.getColumn(columnIndex);
+                Columns col = getColFromHeader(columnIndex); // Columns.getColumn(columnIndex);
+                //Columns col = Columns.getColumn(columnIndex);
                 DB_RecordCell cellObj = (DB_RecordCell) recordCellArray[rowIndex][columnIndex];
                 if (col == Columns.GRADE
                         || col == Columns.LOTTERY_DRAW
@@ -163,7 +160,7 @@ public class JTableProspectiveStudents extends JTable {
                         return value;
                     }
                 }
-                return recordCellArray[rowIndex][columnIndex];
+                return cellObj; // recordCellArray[rowIndex][columnIndex];
             }
         }
 //
@@ -192,6 +189,11 @@ public class JTableProspectiveStudents extends JTable {
 //            registerData[row][col] = value;
 //            fireTableCellUpdated(row, col);
 //        }
+    }
+    
+    private Columns getColFromHeader(int columnIndex) {
+        String columnHeader = tableHeaderRow[columnIndex];
+        return Columns.getColumnFromHeader(columnHeader);
     }
 
     public void initTable() {
@@ -346,8 +348,9 @@ public class JTableProspectiveStudents extends JTable {
 
             super.getTableCellRendererComponent(table, obj, isSelected, hasFocus, row, column);
             Component comp = this;
-            if (obj instanceof DB_RecordCell) {
-                DB_RecordCell recordCell = (DB_RecordCell) obj;
+            DB_RecordCell recordCell = (DB_RecordCell) recordCellArray[row][column];
+            //if (obj instanceof DB_RecordCell) {
+                //DB_RecordCell recordCell = (DB_RecordCell) obj;
                 Color bgColor = null;
                 if (recordCell.getProspectiveStudent() != null
                         && recordCell.getProspectiveStudent().isAvailableSeatOffered()) {
@@ -374,7 +377,7 @@ public class JTableProspectiveStudents extends JTable {
                     //NOTE:  Opacity has no impact with the Nimbus L&F
                     comp = newCell;
                 }
-            }
+            //}
             return comp;
         }
     }

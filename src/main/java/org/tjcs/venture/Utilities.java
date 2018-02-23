@@ -201,6 +201,16 @@ public class Utilities {
             return getColumn(colNumber);
         }
         
+        public static Columns getColumnFromHeader(String colName) {
+            if (colName == null || colName.trim().isEmpty()) return null;
+            for (Columns value : Columns.values()) {
+                if (value.columnName.equalsIgnoreCase(colName)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
         public static String[] getColumnHeaders() {
             String[] colHeaders = new String[Columns.values().length];
             int i = 0;

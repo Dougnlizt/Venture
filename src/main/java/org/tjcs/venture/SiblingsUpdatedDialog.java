@@ -177,7 +177,7 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         List<DB_RecordCell> dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
         prospectiveStudentsTable = new JTableProspectiveStudents();
-        prospectiveStudentsTable.setAllowClassColumnSorting(true);
+        //prospectiveStudentsTable.setAllowClassColumnSorting(true);
         String[] headerCols = new String[] {Columns.LAST_NAME.getColumnName(),
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.GRADE.getColumnName(),
@@ -229,6 +229,7 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         prospectiveStudentsTable.setProspectiveStudents(tableItems);
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         prospectiveStudentsTable.initTable();
+        prospectiveStudentsTable.applyFilter(null, false);
         jScrollPaneInvalidRecords.setViewportView(prospectiveStudentsTable);
     }
     

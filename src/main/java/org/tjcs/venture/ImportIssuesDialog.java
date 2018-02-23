@@ -232,6 +232,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         prospectiveStudentsTable.setProspectiveStudents(tableItems);
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         prospectiveStudentsTable.initTable();
+        prospectiveStudentsTable.applyFilter(null, false);
         jScrollPaneInvalidRecords.setViewportView(prospectiveStudentsTable);
     }
     

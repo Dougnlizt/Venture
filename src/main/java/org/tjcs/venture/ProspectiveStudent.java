@@ -7,6 +7,7 @@ package org.tjcs.venture;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.tjcs.venture.Utilities.Grade;
 import org.tjcs.venture.Utilities.Tier;
@@ -40,6 +41,11 @@ public class ProspectiveStudent {
 
     public XSSFRow getRowFromSpreadsheet() {
         return rowFromSpreadsheet;
+    }
+    
+    public XSSFCell getColumnFromSourceSpreadsheet(int colIndex) {
+        if (rowFromSpreadsheet == null) return null;
+        return rowFromSpreadsheet.getCell(colIndex);
     }
     
     public String getLastName() {

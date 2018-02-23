@@ -46,10 +46,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -92,6 +95,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jButtonExport = new javax.swing.JButton();
         jButtonImportSettings = new javax.swing.JButton();
         jLabelImportIssues = new javax.swing.JLabel();
+        jButtonExportSettings = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabelSelectAllGrades = new javax.swing.JLabel();
         jLabelClearAllGrades = new javax.swing.JLabel();
@@ -210,52 +214,13 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldDestination, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
-                    .addComponent(jTextFieldMasterFileSource))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonBrowseForMasterFile, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBrowseForDestination, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonImportSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelImportIssues, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldMasterFileSource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBrowseForMasterFile)
-                    .addComponent(jButtonImport)
-                    .addComponent(jButtonImportSettings)
-                    .addComponent(jLabelImportIssues, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBrowseForDestination)
-                    .addComponent(jLabel2)
-                    .addComponent(jButtonExport))
-                .addContainerGap())
-        );
+        jButtonExportSettings.setText("...");
+        jButtonExportSettings.setToolTipText("Modify Export Options"); // NOI18N
+        jButtonExportSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportSettingsActionPerformed(evt);
+            }
+        });
 
         jPanel2.setSize(new java.awt.Dimension(100, 10));
 
@@ -761,7 +726,60 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel22)
                     .addComponent(jLabelNumRecords))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneProspectiveStudents, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                .addComponent(jScrollPaneProspectiveStudents, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldDestination, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                    .addComponent(jTextFieldMasterFileSource))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonBrowseForMasterFile, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBrowseForDestination, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonImportSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonExportSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelImportIssues, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldMasterFileSource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBrowseForMasterFile)
+                    .addComponent(jButtonImport)
+                    .addComponent(jButtonImportSettings)
+                    .addComponent(jLabelImportIssues, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBrowseForDestination)
+                    .addComponent(jLabel2)
+                    .addComponent(jButtonExport)
+                    .addComponent(jButtonExportSettings))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -792,19 +810,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -895,6 +908,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
+    private void jButtonExportSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportSettingsActionPerformed
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        setExportSettings();
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jButtonExportSettingsActionPerformed
+
     /**
      * @param args the command line argument
      */
@@ -936,6 +955,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JButton jButtonBrowseForDestination;
     private javax.swing.JButton jButtonBrowseForMasterFile;
     private javax.swing.JButton jButtonExport;
+    private javax.swing.JButton jButtonExportSettings;
     private javax.swing.JButton jButtonImport;
     private javax.swing.JButton jButtonImportSettings;
     private javax.swing.JButton jButtonStartLottery;
@@ -1015,6 +1035,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final static String GRADES_CHECKED = "Grades Checked";
     private final static String GRADES_OPEN_SEATS = "Grades Open Seats";
     private final static String SPREADSHEET_COLUMNS = "Spreadsheet Columns";
+    private final static String SPREADSHEET_EXPORT_COLUMNS = "Spreadsheet Export Columns";
     private List<DB_RecordCell> dbRecordCellList;
     private List<Lottery> lotteryList;
     private Map<Grade, Lottery> gradeLotteryMap = new HashMap<>();
@@ -1031,6 +1052,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private boolean lotteryStarted = false;
     private boolean lotteryExported = false;
     private boolean allGradesComplete = false;
+    private Map<Integer, String> extraColumns;
+    private List<Integer> extraColumnsToInclude = new ArrayList<>();
     
     /**
      * Need to provide credits for the icon:
@@ -1081,6 +1104,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         
         jButtonStartLottery.setEnabled(false);
         jButtonExport.setEnabled(false);
+        jButtonExportSettings.setEnabled(false);
     }
     
     private void selectSourceFile() {
@@ -1113,6 +1137,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 //            }
 //        });
         importSettings.setVisible(true);
+    }
+    
+    private void setExportSettings() {
+        SpreadsheetExport exportSettings = new SpreadsheetExport(this, true);
+        exportSettings.setLocationRelativeTo(this);
+        exportSettings.setVisible(true);
     }
     
     private void showProblemRows() {
@@ -1158,6 +1188,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         gradeLotteryMap = new TreeMap<>();
         List<XSSFRow> validRows = new ArrayList<>();
         problemRows = new ArrayList<>();
+        extraColumns = new TreeMap<>();
         int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
         int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
         int tierColIndex = Columns.getColumnIndex(Columns.TIER);
@@ -1173,8 +1204,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     continue;
                 }
                 int rows = sheet.getPhysicalNumberOfRows();
-                System.out.println("Sheet " + k + " \"" + wb.getSheetName(k) + "\" has " + rows
-                                + " row(s).");
+                //System.out.println("Sheet " + k + " \"" + wb.getSheetName(k) + "\" has " + rows
+                //                + " row(s).");
                 for (int r = 0; r < rows; r++) {
                     XSSFRow row = sheet.getRow(r);
                     if (row == null) {
@@ -1190,6 +1221,23 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             || lastNameCol.getCellTypeEnum() == CellType.BLANK
                             || lastNameCol.getStringCellValue().equals("Last_Name")
                             || lastNameCol.getStringCellValue().startsWith("the above names have been")) {
+                        if (extraColumns.isEmpty()
+                                && lastNameCol != null
+                                && lastNameCol.getCellTypeEnum() == CellType.STRING
+                                && lastNameCol.getCellTypeEnum() != CellType.BLANK
+                                && lastNameCol.getStringCellValue().equals("Last_Name")) {
+                            //Get all the column names not already getting imported
+                            for (int colIndex = 0; colIndex < 30; colIndex ++) {
+                                XSSFCell tempCell = row.getCell(colIndex);
+                                if (tempCell == null
+                                        || tempCell.getCellTypeEnum() != CellType.STRING
+                                        || tempCell.getCellTypeEnum() == CellType.BLANK) {
+                                    continue;
+                                }
+                                if (Columns.getColumn(colIndex) != null) continue;
+                                extraColumns.put(colIndex, tempCell.getStringCellValue());
+                            }
+                        }
                         continue;
                     }
 
@@ -1249,6 +1297,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             rePopulateProspectiveStudents();
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             jButtonStartLottery.setEnabled(true);
+            jButtonExportSettings.setEnabled(true);
             jButtonExport.setEnabled(false);
         } catch (Exception ex) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1292,12 +1341,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
-            Workbook wb = new XSSFWorkbook();
+            XSSFWorkbook wb = new XSSFWorkbook();
             CellStyle cellDateStyleDateTime = wb.createCellStyle();
             CellStyle cellDateStyleDate = wb.createCellStyle();
             CreationHelper createHelper = wb.getCreationHelper();
             cellDateStyleDateTime.setDataFormat(createHelper.createDataFormat().getFormat("M/d/yyyy h:mm AM/PM"));
             cellDateStyleDate.setDataFormat(createHelper.createDataFormat().getFormat("M/d/yyyy"));
+            DataFormatter dataFormatter = new DataFormatter();
+            FormulaEvaluator objFormulaEvaluator = new XSSFFormulaEvaluator(wb);
 
             Sheet sheet;
             Row row;
@@ -1376,15 +1427,20 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
                 Grade grade = entry.getKey();
                 Lottery lottery = entry.getValue();
+                Map<Integer, Integer> colIndexWidthMap = new HashMap<>();
                 sheet = wb.createSheet(grade.getGradeDescription());
                 row = sheet.createRow(0);
                 int colCount = 0;
                 row.createCell(colCount ++).setCellValue("Last Name");
                 row.createCell(colCount ++).setCellValue("First Name");
                 row.createCell(colCount ++).setCellValue("Tier");
-                row.createCell(colCount ++).setCellValue("X Column");
+                row.createCell(colCount ++).setCellValue("");
                 row.createCell(colCount ++).setCellValue("Lottery Draw");
                 row.createCell(colCount ++).setCellValue("Waitlist Number");
+                for (Integer colSourceIndex : extraColumnsToInclude) {
+                    colIndexWidthMap.put(colCount, extraColumns.get(colSourceIndex).length());
+                    row.createCell(colCount ++).setCellValue(extraColumns.get(colSourceIndex));
+                }
                 row.createCell(colCount ++).setCellValue("Notes");
                 Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = lottery.getTierPS_List();
                 rowIndex = 1;
@@ -1410,14 +1466,56 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                         } else {
                             row.createCell(colCount ++, CellType.BLANK);
                         }
-                        row.createCell(colCount ++, CellType.BLANK);
+                        //Get the extra data to export
+                        for (Integer colIndexSource : extraColumnsToInclude) {
+                            XSSFCell cell = prospectiveStudent.getColumnFromSourceSpreadsheet(colIndexSource);
+                            if (cell == null) {
+                                row.createCell(colCount ++);
+                                continue;
+                            }
+                            objFormulaEvaluator.evaluate(cell);
+                            String cellValue = dataFormatter.formatCellValue(cell, objFormulaEvaluator);
+                            Cell targetCell = row.createCell(colCount ++);
+                            targetCell.setCellValue(cellValue);
+                            colIndexWidthMap.put(colCount - 1, Math.max(colIndexWidthMap.get(colCount - 1), cellValue.length()));
+//                            targetCell.setCellComment(cell.getCellComment());
+//                            switch(cell.getCellTypeEnum()) {
+//                                case BLANK:
+//                                    break;
+//                                case BOOLEAN:
+//                                    targetCell.setCellValue(cell.getBooleanCellValue());
+//                                    break;
+//                                case ERROR:
+//                                    targetCell.setCellValue(cell.getErrorCellString());
+//                                    break;
+//                                case FORMULA:
+//                                    targetCell.setCellValue(cell.getCellFormula());
+//                                    break;
+//                                case NUMERIC:
+//                                    targetCell.setCellValue(cell.getNumericCellValue());
+//                                    break;
+//                                case STRING:
+//                                    targetCell.setCellValue(cell.getStringCellValue());                                    
+//                                    break;
+//                                default:
+//                                    targetCell.setCellValue(cell.getRawValue());
+//                                    break;
+//                            }
+//                            colIndexWidthMap.put(colCount - 1, cell.getStringCellValue().length());
+                        }
+                        row.createCell(colCount, CellType.BLANK);
                     }
                 }
                 setColumnWidth(sheet, ColumnsExport.LAST_NAME.getOrder(), maxWidthLastName);
                 setColumnWidth(sheet, ColumnsExport.FIRST_NAME.getOrder(), maxWidthFirstName);
                 setColumnWidth(sheet, ColumnsExport.LOTTERY_DRAW.getOrder(), widthLotteryDraw);
                 setColumnWidth(sheet, ColumnsExport.WAIT_LIST_NUMBER.getOrder(), widthWaitList);
-                setColumnWidth(sheet, ColumnsExport.NOTES.getOrder(), ColumnsExport.NOTES.getNumCharsForWidth());
+                for (Map.Entry<Integer, Integer> colIndexWidthObj : colIndexWidthMap.entrySet()) {
+                    Integer extraColIndex = colIndexWidthObj.getKey();
+                    Integer width = colIndexWidthObj.getValue();
+                    setColumnWidth(sheet, extraColIndex, width);
+                }
+                setColumnWidth(sheet, colCount, ColumnsExport.NOTES.getNumCharsForWidth());
             }
             
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -1854,6 +1952,18 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
         return null;
     }
+
+    public Map<Integer, String> getExtraColumns() {
+        return extraColumns;
+    }
+
+    public List<Integer> getExtraColumnsToInclude() {
+        return extraColumnsToInclude;
+    }
+
+    public void setExtraColumnsToInclude(List<Integer> extraColumnsToInclude) {
+        this.extraColumnsToInclude = extraColumnsToInclude;
+    }
     
     private void loadSettings() {
         //file format is Field Name~value
@@ -1934,6 +2044,16 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             }
                         }
                         break;
+                    case SPREADSHEET_EXPORT_COLUMNS:
+                        String[] columnExportInfo = temp.trim().split(",");
+                        for (String columnStr : columnExportInfo) {
+                            try {
+                                extraColumnsToInclude.add(Integer.parseInt(columnStr));
+                            } catch (Exception ex) {
+                                continue;
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -1974,6 +2094,13 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         stringToWrite.append(SPREADSHEET_COLUMNS).append("~");
         for (Columns value : Columns.values()) {
             stringToWrite.append(String.valueOf(value.getOrder())).append(":").append(value.getSpreadsheetColumn()).append(",");
+        }
+        stringToWrite.append("\n");
+        
+        //Save spreadsheet export settings
+        stringToWrite.append(SPREADSHEET_EXPORT_COLUMNS).append("~");
+        for (Integer colIndex : extraColumnsToInclude) {
+            stringToWrite.append(String.valueOf(colIndex)).append(",");
         }
         stringToWrite.append("\n");
         
