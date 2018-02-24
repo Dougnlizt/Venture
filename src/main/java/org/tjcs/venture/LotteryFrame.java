@@ -1698,7 +1698,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
-        Object[][] tableItems = new Object[1][7];
         prospectiveStudentsTable = new JTableProspectiveStudents();
         String[] headerCols = Columns.getColumnHeaders();
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
@@ -1751,7 +1750,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
 //        int totalCells = dbRecordCellList.size();
 //        int totalRows = totalCells / 7;
         
-        tableItems = new Object[rowCounter][7];
+        Object[][] tableItems = new Object[rowCounter][7];
         
         rowCounter = 0;
         int colCounter = 0;
