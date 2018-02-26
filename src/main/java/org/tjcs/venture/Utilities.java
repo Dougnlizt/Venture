@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -21,7 +20,18 @@ import javax.swing.JOptionPane;
  * @author dougthompson
  */
 public class Utilities {
-    public static Color LIGHT_GREEN_COLOR = new Color(0xBB, 0xED, 0xC3);
+//    public static Color LIGHT_GREEN_COLOR = new Color(0xBB, 0xED, 0xC3);
+//    public static Color MEDIUM_GREEN_COLOR = new Color(0xCA, 0xDB, 0xC8);
+//    public static Color DARK_GREEN_COLOR = new Color(0x0B, 0x51, 0x01);
+    //public static Color LIGHT_GREEN_COLOR = new Color(0x99, 0x9F, 0xF8); //#757AF3
+    //public static Color LIGHT_GREEN_COLOR = new Color(0xB9, 0xBF, 0xF8); //#757AF3
+    public static Color LIGHT_GREEN_COLOR = new Color(0xC1, 0xE8, 0xB6); //#C1E8B6
+    //public static Color MEDIUM_GREEN_COLOR = new Color(0x75, 0x7A, 0xF3); //#4348F2
+    //public static Color MEDIUM_GREEN_COLOR = new Color(0x99, 0x9F, 0xF8); //#757AF3
+    public static Color MEDIUM_GREEN_COLOR = new Color(0xA2, 0xE0, 0x92); //#A2E092
+//    public static Color DARK_GREEN_COLOR = new Color(0x0E, 0x3A, 0xE2);
+    //public static Color DARK_GREEN_COLOR = new Color(0x00, 0x00, 0x00);
+    public static Color BLACK_COLOR = new Color(0x00, 0x00, 0x00);
     
     public enum Tier {
         CHILDREN_OF_EMPLOYEES_1(1, "Children of Employees and Founders"),

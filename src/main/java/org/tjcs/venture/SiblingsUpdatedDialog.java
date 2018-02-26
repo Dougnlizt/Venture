@@ -202,13 +202,13 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
             tempCell = new DB_RecordCell(prospectiveStudent.getFirstName(), rowCounter, colCounter++);
             tempCell.setProspectiveStudent(prospectiveStudent);
             dbRecordCellList.add(tempCell);
-            tempCell = new DB_RecordCell(Utilities.Grade.getNumberStr(prospectiveStudent.getGrade()), rowCounter, colCounter++);
+            tempCell = new DB_RecordCell(Utilities.Grade.getNumberStr(prospectiveStudent.getGrade()), true, rowCounter, colCounter++);
             tempCell.setProspectiveStudent(prospectiveStudent);
             dbRecordCellList.add(tempCell);
-            tempCell = new DB_RecordCell(Utilities.Tier.getNumberStr(prospectiveStudent.getOldTier()), rowCounter, colCounter++);
+            tempCell = new DB_RecordCell(Utilities.Tier.getNumberStr(prospectiveStudent.getOldTier()), true, rowCounter, colCounter++);
             tempCell.setProspectiveStudent(prospectiveStudent);
             dbRecordCellList.add(tempCell);
-            tempCell = new DB_RecordCell(Utilities.Tier.getNumberStr(prospectiveStudent.getTier()), rowCounter, colCounter++);
+            tempCell = new DB_RecordCell(Utilities.Tier.getNumberStr(prospectiveStudent.getTier()), true, rowCounter, colCounter++);
             tempCell.setProspectiveStudent(prospectiveStudent);
             dbRecordCellList.add(tempCell);
             rowCounter++;

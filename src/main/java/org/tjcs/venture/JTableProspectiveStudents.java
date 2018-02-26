@@ -136,38 +136,20 @@ public class JTableProspectiveStudents extends JTable {
         public int getColumnCount() {
             return tableHeaderRow.length;
         }
-//
-//        public String getColumnName(int col) {
-//            return tableHeaderRow[col];
-//        }
-//
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             if (recordCellArray == null || rowIndex > recordCellArray.length - 1) {
                 return null;
             } else {
-                Columns col = getColFromHeader(columnIndex); // Columns.getColumn(columnIndex);
-                //Columns col = Columns.getColumn(columnIndex);
-                DB_RecordCell cellObj = (DB_RecordCell) recordCellArray[rowIndex][columnIndex];
-                if (col == Columns.GRADE
-                        || col == Columns.LOTTERY_DRAW
-                        || col == Columns.TIER
-                        || col == Columns.WAIT_LIST_SIBLINGS) {
-                    String value = cellObj.toString();
-                    try {
-                        return Integer.parseInt(value);
-                    } catch (Exception ex) {
-                        return value;
-                    }
-                }
-                return cellObj; // recordCellArray[rowIndex][columnIndex];
+                return (DB_RecordCell) recordCellArray[rowIndex][columnIndex];
             }
         }
-//
-//        /*
-//         * Don't need to implement this method unless your table's
-//         * editable.
-//         */
+
+        /*
+         * Don't need to implement this method unless your table's
+         * editable.
+         */
         @Override
         public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
@@ -179,23 +161,8 @@ public class JTableProspectiveStudents extends JTable {
             recordCellArray = new Object[0][0];
             repaint();
         }
-
-//
-//        /*
-//         * Don't need to implement this method unless your table's
-//         * data can change.
-//         */
-//        public void setValueAt(Object value, int row, int col) {
-//            registerData[row][col] = value;
-//            fireTableCellUpdated(row, col);
-//        }
     }
     
-    private Columns getColFromHeader(int columnIndex) {
-        String columnHeader = tableHeaderRow[columnIndex];
-        return Columns.getColumnFromHeader(columnHeader);
-    }
-
     public void initTable() {
         tableModel = new ProspectiveStudentsTableModel();
 
@@ -304,15 +271,6 @@ public class JTableProspectiveStudents extends JTable {
                             return true;
                         }
                         return false;
-//                        //Check each column value for this entry (row)
-//                        for (int i = entry.getValueCount() - 1; i >=0; i--) {
-//                            value = entry.getStringValue(i);
-//                            matcher.reset(value);
-//                            if (matcher.find()) {
-//                                return true;
-//                            }
-//                        }
-//                        return false;
                     } catch (Exception ex) {
                         return false;
                     }
@@ -348,36 +306,56 @@ public class JTableProspectiveStudents extends JTable {
 
             super.getTableCellRendererComponent(table, obj, isSelected, hasFocus, row, column);
             Component comp = this;
-            DB_RecordCell recordCell = (DB_RecordCell) recordCellArray[row][column];
-            //if (obj instanceof DB_RecordCell) {
-                //DB_RecordCell recordCell = (DB_RecordCell) obj;
-                Color bgColor = null;
-                if (recordCell.getProspectiveStudent() != null
-                        && recordCell.getProspectiveStudent().isAvailableSeatOffered()) {
-                    bgColor = Utilities.LIGHT_GREEN_COLOR;
-                    setBackground(bgColor);
+            //The 'obj' is what is returned by the 'getValueAt' method.  Need to get the DB_RecordCell object
+                //from another cell to see if the student made the lottery.  In addition, the 'row' is not
+                //the same as the row in the record cell array.  It is the row of the object being displayed.
+            boolean markRow = false;
+            DB_RecordCell recordCell = null;
+            setForeground(null);
+            recordCell = (DB_RecordCell) obj;
+            markRow = recordCell.getProspectiveStudent() != null
+                    && recordCell.getProspectiveStudent().isAvailableSeatOffered();
+            Color bgColor = null;
+            Color fgColor = null; //Utilities.BLACK_COLOR;
+            if (markRow) {
+                if (row % 2 == 0) {
+                    bgColor = Utilities.MEDIUM_GREEN_COLOR;
+                    fgColor = Utilities.BLACK_COLOR;
                 } else {
-                    bgColor = (row % 2 == 0) ? evenRowBG : oddRowBG;
-                    setBackground(bgColor);
+                    bgColor = Utilities.LIGHT_GREEN_COLOR;
+                    fgColor = Utilities.BLACK_COLOR;
                 }
+            } else {
+                if (row % 2 == 0) {
+                    bgColor = evenRowBG;
+                } else {
+                    bgColor = oddRowBG;
+                }                
+            }
 
-                //If this option was found as part of a search, highlight accordingly...
-                if (recordCell.isSearchMatch()) {
-                    String optionValue = recordCell.getValue();
-                    int matchStart = recordCell.getSearchStart();
-                    int matchEnd = recordCell.getSearchEnd();
-
-                    CTextPane newCell = new CTextPane();
-                    newCell.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-                    newCell.setEditable(false);
-                    newCell.enableLineWrap(false);
-                    newCell.setText(optionValue);
-                    newCell.setBackgroundColor(bgColor);
-                    newCell.highlightText(matchStart, matchEnd, this.getFont(), this.getForeground(), Color.YELLOW);
-                    //NOTE:  Opacity has no impact with the Nimbus L&F
-                    comp = newCell;
+            //If this option was found as part of a search, highlight accordingly...
+            if (recordCell.isSearchMatch()) {
+                String optionValue = recordCell.getValue();
+                int matchStart = recordCell.getSearchStart();
+                int matchEnd = recordCell.getSearchEnd();
+                CTextPane newCell = new CTextPane();
+                newCell.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+                newCell.setEditable(false);
+                newCell.enableLineWrap(false);
+                newCell.setText(optionValue);
+                newCell.setBackgroundColor(bgColor);
+                if (fgColor != null) {
+                    newCell.highlightText(0, optionValue.length(), this.getFont(), fgColor, bgColor);
                 }
-            //}
+                newCell.highlightText(matchStart, matchEnd, this.getFont(), this.getForeground(), Color.YELLOW);
+                //NOTE:  Opacity has no impact with the Nimbus L&F
+                comp = newCell;
+            } else {
+                setBackground(bgColor);
+                if (fgColor != null) {
+                    setForeground(fgColor);
+                }
+            }
             return comp;
         }
     }

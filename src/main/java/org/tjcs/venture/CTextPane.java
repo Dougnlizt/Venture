@@ -96,7 +96,27 @@ public class CTextPane extends JTextPane {
         }
         doc.setCharacterAttributes(startPos, (endPos - startPos), tmpAttrSet, true);
     }
-
+    
+//    public void setForegroundColor(int startPos, int endPos, Font font, Color color, Color backgroundColor) {
+//        SimpleAttributeSet tmpAttrSet = new SimpleAttributeSet(defaultAttrSet);
+//        if (font != null) {
+//            if (font.getSize() > 0) {
+//                StyleConstants.setFontSize(tmpAttrSet, font.getSize());
+//            }
+//            StyleConstants.setItalic(tmpAttrSet, (font.getStyle() & Font.ITALIC) != 0);
+//            StyleConstants.setBold(tmpAttrSet, (font.getStyle() & Font.BOLD) != 0);
+//        }
+//        if (color != null) {
+//            StyleConstants.setForeground(tmpAttrSet, color);
+//        }
+//        if (backgroundColor == null) {
+//            StyleConstants.setBackground(tmpAttrSet, defaultPaneBGColor);
+//        } else {
+//            StyleConstants.setBackground(tmpAttrSet, backgroundColor);
+//        }
+//        doc.setCharacterAttributes(startPos, (endPos - startPos), tmpAttrSet, true);        
+//    }
+//
     public void setBackgroundColor(Color c) {
         // this is to fix a problem with the Nimbus look and feel not displaying the background correctly.
         UIDefaults defaults = new UIDefaults();

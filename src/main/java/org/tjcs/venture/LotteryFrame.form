@@ -287,7 +287,7 @@
                               <Component id="jLabel18" alignment="2" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButtonStartLottery" pref="241" max="32767" attributes="0"/>
+                          <Component id="jButtonStartLottery" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -764,12 +764,12 @@
                 <Component class="javax.swing.JButton" name="jButtonStartLottery">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Lucida Grande" size="18" style="1"/>
+                      <Font name="Lucida Grande" size="24" style="1"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="33" green="99" red="0" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Start&lt;br/&gt;Lottery&lt;/center&gt;&lt;/html&gt;" noResource="true"/>
+                    <Property name="text" type="java.lang.String" value="Start Lottery" noResource="true"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[108, 52]"/>
                     </Property>

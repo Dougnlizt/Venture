@@ -28,11 +28,19 @@ public class DB_RecordCell extends JLabel implements ActionListener, Comparable<
     private int row = 0;
     private int col = 0;
     private ProspectiveStudent prospectiveStudent;
+    private boolean intValue = false;
 
     public DB_RecordCell(String value, int row, int col) {
         _value = value;
         this.row = row;
         this.col = col;
+    }
+
+    public DB_RecordCell(String value, boolean intValue, int row, int col) {
+        _value = value;
+        this.row = row;
+        this.col = col;
+        this.intValue = intValue;
     }
 
     public boolean isSearchMatch() {
@@ -119,6 +127,10 @@ public class DB_RecordCell extends JLabel implements ActionListener, Comparable<
     
     @Override
     public int compareTo(DB_RecordCell o) {
+        if (intValue && o.intValue) {
+            //Compare as ints
+            return ((Integer) Integer.parseInt(_value)).compareTo(((Integer) Integer.parseInt(o._value)));
+        }
         return this._value.compareToIgnoreCase(o._value);
     }
 }

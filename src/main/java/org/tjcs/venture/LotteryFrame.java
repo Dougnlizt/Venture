@@ -444,9 +444,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        jButtonStartLottery.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jButtonStartLottery.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         jButtonStartLottery.setForeground(new java.awt.Color(0, 153, 51));
-        jButtonStartLottery.setText("<html><center>Start<br/>Lottery</center></html>"); // NOI18N
+        jButtonStartLottery.setText("Start Lottery"); // NOI18N
         jButtonStartLottery.setMaximumSize(new java.awt.Dimension(108, 52));
         jButtonStartLottery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -530,7 +530,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jCheckBoxKinder)
                     .addComponent(jLabel18))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
+                .addComponent(jButtonStartLottery, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1081,7 +1081,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final String appName = "Venture";
     private final String toolSettingsFileName = "ventureSettings.txt";
     private final static String PROGRAM_NAME = "Venture";
-    private final static String PROGRAM_VERSION = "1.0.0";
+    private final static String PROGRAM_VERSION = "1.1.0";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
     private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
@@ -1714,7 +1714,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 if (prospectiveStudentsTierMap.get(tier) == null) continue;
                 for (ProspectiveStudent prospectiveStudent : prospectiveStudentsTierMap.get(tier)) { // value.getStudentsByTier(tier)) {
                     int colCounter = 0;
-                    DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getLotteryDrawNumber()), rowCounter, colCounter);
+                    DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getLotteryDrawNumber()), true, rowCounter, colCounter);
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
@@ -1726,11 +1726,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
-                    tempCell = new DB_RecordCell(Tier.getNumberStr(prospectiveStudent.getTier()), rowCounter, colCounter++);
+                    tempCell = new DB_RecordCell(Tier.getNumberStr(prospectiveStudent.getTier()), true, rowCounter, colCounter++);
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
-                    tempCell = new DB_RecordCell(Grade.getNumberStr(prospectiveStudent.getGrade()), rowCounter, colCounter++);
+                    tempCell = new DB_RecordCell(Grade.getNumberStr(prospectiveStudent.getGrade()), true, rowCounter, colCounter++);
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
@@ -1738,7 +1738,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
-                    tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getSiblingsOnWaitlist().size()), rowCounter, colCounter++);
+                    tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getSiblingsOnWaitlist().size()), true, rowCounter, colCounter++);
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
@@ -2033,24 +2033,31 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
      */
     private void updateDB_Search() {
         String searchValue = jTextFieldFilterStudents.getText();
-        Pattern searchPattern = null;
-        try {
-            searchPattern = Pattern.compile(searchValue, Pattern.CASE_INSENSITIVE);
-        } catch (PatternSyntaxException ex) {
-            //ignore
-        }
-        Matcher searchMatcher = null;
-        for (DB_RecordCell cellObj : dbRecordCellList) {
-            if (cellObj.getValue() == null) {
-                continue;
+        if (searchValue != null
+                && !searchValue.isEmpty()) {
+            Pattern searchPattern = null;
+            try {
+                searchPattern = Pattern.compile(searchValue, Pattern.CASE_INSENSITIVE);
+            } catch (PatternSyntaxException ex) {
+                //ignore
             }
-            searchMatcher = searchPattern.matcher(cellObj.getValue());
-            if (searchMatcher.find()) {
-                cellObj.setSearchMatch(true);
-                cellObj.setSearchStart(searchMatcher.start());
-                cellObj.setSearchEnd(searchMatcher.end());
-            } else {
-                cellObj.setSearchMatch(false);
+            Matcher searchMatcher = null;
+            for (DB_RecordCell cellObj : dbRecordCellList) {
+                if (cellObj.getValue() == null) {
+                    continue;
+                }
+                searchMatcher = searchPattern.matcher(cellObj.getValue());
+                if (searchMatcher.find()) {
+                    cellObj.setSearchMatch(true);
+                    cellObj.setSearchStart(searchMatcher.start());
+                    cellObj.setSearchEnd(searchMatcher.end());
+                } else {
+                    cellObj.setSearchMatch(false);
+                }
+            }
+        } else {
+            for (DB_RecordCell cellObj : dbRecordCellList) {
+                    cellObj.setSearchMatch(false);
             }
         }
         //Now only show those rows in the table where a match exists

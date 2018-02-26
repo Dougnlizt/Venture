@@ -212,7 +212,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
             String reason = entry.getValue();
         //for (XSSFRow row : problemRows) {
             int colCounter = 0;
-            DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(row.getRowNum() + 1), rowCounter, colCounter);
+            DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(row.getRowNum() + 1), true, rowCounter, colCounter);
             dbRecordCellList.add(tempCell);
             tempCell = getCellValue(row, lastNameColIndex, rowCounter, colCounter++);
             dbRecordCellList.add(tempCell);
