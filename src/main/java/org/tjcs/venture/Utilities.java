@@ -32,6 +32,22 @@ public class Utilities {
 //    public static Color DARK_GREEN_COLOR = new Color(0x0E, 0x3A, 0xE2);
     //public static Color DARK_GREEN_COLOR = new Color(0x00, 0x00, 0x00);
     public static Color BLACK_COLOR = new Color(0x00, 0x00, 0x00);
+    public static String EMPTY_LOTTERY_DRAW_NUMBER = "-----";
+    public static List<String> charactersArray = new ArrayList<>();
+    static {
+        int asciA_StartsAt = 65;        
+        for (int i = 0; i < 26; i ++) {
+            String character = String.valueOf((char) (asciA_StartsAt + i));
+            charactersArray.add(character);
+        }
+        for (int i = 0; i < 26; i ++) {
+            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
+            for (int j = 0; j < 26; j ++) {
+                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
+                charactersArray.add(firstCharacter + secondCharacter);
+            }
+        }
+    }
     
     public enum Tier {
         CHILDREN_OF_EMPLOYEES_1(1, "Children of Employees and Founders"),
@@ -158,21 +174,25 @@ public class Utilities {
         GRADE(4, "Grade", "W", true),
         FAMILY_KEY(5, "Family Key", "C", true),
         WAIT_LIST_SIBLINGS(6, "Wait List Siblings", null, false),
+        DATA_ROW_NUM(7, "Data Row #", null, false),
+        IMPORT_ISSUE_REASON(8, "Reason", null, false),
+        OLD_TIER(9, "Old Tier", null, false),
+        NEW_TIER(10, "New Tier", null, false),
         ;
-        private int order;
+        private int uniqueIndex;
         private String columnName;
         private String spreadsheetColumn;
         private boolean fromSpreadsheet;
 
-        private Columns(int order, String columnName, String spreadsheetColumn, boolean fromSpreadsheet) {
-            this.order = order;
+        private Columns(int uniqueIndex, String columnName, String spreadsheetColumn, boolean fromSpreadsheet) {
+            this.uniqueIndex = uniqueIndex;
             this.columnName = columnName;
             this.spreadsheetColumn = spreadsheetColumn;
             this.fromSpreadsheet = fromSpreadsheet;
         }
 
-        public int getOrder() {
-            return order;
+        public int getUniqueIndex() {
+            return uniqueIndex;
         }
 
         public String getColumnName() {
@@ -191,16 +211,16 @@ public class Utilities {
             return fromSpreadsheet;
         }
         
-        public static Columns getColumn(int colNum) {
+        public static Columns getColumnFromUniqueIndex(int colNum) {
             for (Columns value : Columns.values()) {
-                if (value.order == colNum) {
+                if (value.uniqueIndex == colNum) {
                     return value;
                 }
             }
             return null;
         }
         
-        public static Columns getColumn(String colNum) {
+        public static Columns getColumnFromUniqueIndex(String colNum) {
             if (colNum == null || colNum.trim().isEmpty()) return null;
             int colNumber = -1;
             try {
@@ -208,13 +228,24 @@ public class Utilities {
             } catch (Exception ex) {
                 return null;
             }
-            return getColumn(colNumber);
+            return Columns.getColumnFromUniqueIndex(colNumber);
         }
         
         public static Columns getColumnFromHeader(String colName) {
             if (colName == null || colName.trim().isEmpty()) return null;
             for (Columns value : Columns.values()) {
                 if (value.columnName.equalsIgnoreCase(colName)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+        
+        public static Columns getColumnFromSpreadsheetColumn(String colLetterName) {
+            if (colLetterName == null || colLetterName.trim().isEmpty()) return null;
+            for (Columns value : Columns.values()) {
+                if (value.spreadsheetColumn != null
+                        && value.spreadsheetColumn.equalsIgnoreCase(colLetterName)) {
                     return value;
                 }
             }
@@ -230,13 +261,16 @@ public class Utilities {
             return colHeaders;
         }
         
-        public static int getColumnIndex(Columns col) {
+        public static int getColumnSpreadsheetIndex(Columns col) {
             int colIndex = -1;
             if (col.spreadsheetColumn != null) {
-                List<String> charArray = getSpreadsheetColumnLetters();
-                colIndex = charArray.indexOf(col.spreadsheetColumn);
+                colIndex = charactersArray.indexOf(col.spreadsheetColumn);
             }
             return colIndex;
+        }
+       
+        public static Columns getColumnFromSpreadsheetIndex(int spreadsheetColIndex) {
+            return getColumnFromSpreadsheetColumn(charactersArray.get(spreadsheetColIndex));
         }
     }
     
@@ -323,8 +357,8 @@ public class Utilities {
         public static int getColumnIndex(ColumnsExport col) {
             int colIndex = -1;
             if (col.spreadsheetColumn != null) {
-                List<String> charArray = getSpreadsheetColumnLetters();
-                colIndex = charArray.indexOf(col.spreadsheetColumn);
+                //List<String> charArray = getSpreadsheetColumnLetters();
+                colIndex = charactersArray.indexOf(col.spreadsheetColumn);
             }
             return colIndex;
         }
@@ -385,20 +419,21 @@ public class Utilities {
     }
     
     public static List<String> getSpreadsheetColumnLetters() {
-        int asciA_StartsAt = 65;
-        List<String> charactersArray = new ArrayList<>();
-        for (int i = 0; i < 26; i ++) {
-            String character = String.valueOf((char) (asciA_StartsAt + i));
-            charactersArray.add(character);
-        }
-        for (int i = 0; i < 26; i ++) {
-            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
-            for (int j = 0; j < 26; j ++) {
-                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
-                charactersArray.add(firstCharacter + secondCharacter);
-            }
-        }
         return charactersArray;
+//        int asciA_StartsAt = 65;
+//        List<String> charactersArray = new ArrayList<>();
+//        for (int i = 0; i < 26; i ++) {
+//            String character = String.valueOf((char) (asciA_StartsAt + i));
+//            charactersArray.add(character);
+//        }
+//        for (int i = 0; i < 26; i ++) {
+//            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
+//            for (int j = 0; j < 26; j ++) {
+//                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
+//                charactersArray.add(firstCharacter + secondCharacter);
+//            }
+//        }
+//        return charactersArray;
     }
     
 }

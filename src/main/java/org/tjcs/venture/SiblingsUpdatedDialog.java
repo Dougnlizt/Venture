@@ -181,13 +181,14 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         String[] headerCols = new String[] {Columns.LAST_NAME.getColumnName(),
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.GRADE.getColumnName(),
-                                            "Old Tier",
-                                            "New Tier"};
+                                            Columns.OLD_TIER.getColumnName(),
+                                            Columns.NEW_TIER.getColumnName(),
+                                            };
 
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         
-//        int lastNameColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.LAST_NAME);
-//        int firstNameColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.FIRST_NAME);
+//        int lastNameColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.LAST_NAME);
+//        int firstNameColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.FIRST_NAME);
 //        int gradeColIndex = 2;
 //        int oldTierIndex = 3;
 //        int newTierIndex = 4;

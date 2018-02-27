@@ -127,7 +127,9 @@ public class DB_RecordCell extends JLabel implements ActionListener, Comparable<
     
     @Override
     public int compareTo(DB_RecordCell o) {
-        if (intValue && o.intValue) {
+        if (intValue && o.intValue
+                && !Utilities.EMPTY_LOTTERY_DRAW_NUMBER.equals(_value)
+                && !Utilities.EMPTY_LOTTERY_DRAW_NUMBER.equals(o._value)) {
             //Compare as ints
             return ((Integer) Integer.parseInt(_value)).compareTo(((Integer) Integer.parseInt(o._value)));
         }

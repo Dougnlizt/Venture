@@ -1118,6 +1118,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         setTitle(PROGRAM_NAME + " " + PROGRAM_VERSION);
         setIconImage(lotteryIcon.getImage());
         jLabelImportIssues.setVisible(false);
+        
+        jTextFieldDestination.setText(homeDir);
 
         dbRecordCellList = new ArrayList<>();
         lotteryList = new ArrayList<>();
@@ -1245,11 +1247,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         problemRows = new ArrayList<>();
         problemRowsMap = new TreeMap<>();
         extraColumns = new TreeMap<>();
-        int lastNameColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
-        int firstNameColIndex = Columns.getColumnIndex(Columns.FIRST_NAME);
-        int tierColIndex = Columns.getColumnIndex(Columns.TIER);
-        int gradeColIndex = Columns.getColumnIndex(Columns.GRADE);
-        int familyKeyColIndex = Columns.getColumnIndex(Columns.LAST_NAME);
+        int lastNameColIndex = Columns.getColumnSpreadsheetIndex(Columns.LAST_NAME);
+        int firstNameColIndex = Columns.getColumnSpreadsheetIndex(Columns.FIRST_NAME);
+        int tierColIndex = Columns.getColumnSpreadsheetIndex(Columns.TIER);
+        int gradeColIndex = Columns.getColumnSpreadsheetIndex(Columns.GRADE);
+        int familyKeyColIndex = Columns.getColumnSpreadsheetIndex(Columns.FAMILY_KEY);
         
         try (FileInputStream fis = new FileInputStream(filename)) {
             XSSFWorkbook wb = new XSSFWorkbook(fis);
@@ -1290,7 +1292,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                         || tempCell.getCellTypeEnum() == CellType.BLANK) {
                                     continue;
                                 }
-                                if (Columns.getColumn(colIndex) != null) continue;
+                                if (Columns.getColumnFromSpreadsheetIndex(colIndex) != null) continue;
                                 extraColumns.put(colIndex, tempCell.getStringCellValue());
                             }
                         }
@@ -1699,7 +1701,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         dbRecordCellList = new ArrayList<>();
         JTableProspectiveStudents prospectiveStudentsTable;
         prospectiveStudentsTable = new JTableProspectiveStudents();
-        String[] headerCols = Columns.getColumnHeaders();
+        //String[] headerCols = Columns.getColumnHeaders();
+        String[] headerCols = new String[] {Columns.LOTTERY_DRAW.getColumnName(),
+                                            Columns.LAST_NAME.getColumnName(),
+                                            Columns.FIRST_NAME.getColumnName(),
+                                            Columns.TIER.getColumnName(),
+                                            Columns.GRADE.getColumnName(),
+                                            Columns.FAMILY_KEY.getColumnName(),
+                                            Columns.WAIT_LIST_SIBLINGS.getColumnName()};
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         
         int rowCounter = 0;
@@ -1714,7 +1723,12 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 if (prospectiveStudentsTierMap.get(tier) == null) continue;
                 for (ProspectiveStudent prospectiveStudent : prospectiveStudentsTierMap.get(tier)) { // value.getStudentsByTier(tier)) {
                     int colCounter = 0;
-                    DB_RecordCell tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getLotteryDrawNumber()), true, rowCounter, colCounter);
+                    DB_RecordCell tempCell;
+                    if (prospectiveStudent.getLotteryDrawNumber() == -1) {
+                        tempCell = new DB_RecordCell(Utilities.EMPTY_LOTTERY_DRAW_NUMBER, true, rowCounter, colCounter);
+                    } else {
+                        tempCell = new DB_RecordCell(String.valueOf(prospectiveStudent.getLotteryDrawNumber()), true, rowCounter, colCounter);
+                    }
                     tempCell.setProspectiveStudent(prospectiveStudent);
                     dbRecordCellList.add(tempCell);
                     //tableItems[rowCounter][colCounter++] = tempCell;
@@ -2158,7 +2172,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             try {
                                 String colNumber = columnDetail[0].trim();
                                 String spreadsheetColStr = columnDetail[1].trim();
-                                Columns savedCol = Columns.getColumn(colNumber);
+                                Columns savedCol = Columns.getColumnFromUniqueIndex(colNumber);
                                 if (savedCol != null) {
                                     savedCol.setSpreadsheetColumn(spreadsheetColStr);
                                 }
@@ -2216,7 +2230,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         //Save spreadsheet settings
         stringToWrite.append(SPREADSHEET_COLUMNS).append("~");
         for (Columns value : Columns.values()) {
-            stringToWrite.append(String.valueOf(value.getOrder())).append(":").append(value.getSpreadsheetColumn()).append(",");
+            if (value.getSpreadsheetColumn() == null) continue;
+            stringToWrite.append(String.valueOf(value.getUniqueIndex())).append(":").append(value.getSpreadsheetColumn()).append(",");
         }
         stringToWrite.append("\n");
         

@@ -163,6 +163,11 @@ public class JTableProspectiveStudents extends JTable {
         }
     }
     
+    private Columns getColFromHeader(int columnIndex) {
+        String columnHeader = tableHeaderRow[columnIndex];
+        return Columns.getColumnFromHeader(columnHeader);
+    }
+    
     public void initTable() {
         tableModel = new ProspectiveStudentsTableModel();
 
@@ -261,13 +266,13 @@ public class JTableProspectiveStudents extends JTable {
                             //certain columns, use the record already in the cell to return if there was a matched search.
                             //Already doing this so that I can highlight the value of the found match.
                         rowCounter ++;
-                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.LAST_NAME.getOrder()]).isSearchMatch()) {
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.LAST_NAME.getUniqueIndex()]).isSearchMatch()) {
                             return true;
                         }
-                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FIRST_NAME.getOrder()]).isSearchMatch()) {
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FIRST_NAME.getUniqueIndex()]).isSearchMatch()) {
                             return true;
                         }
-                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FAMILY_KEY.getOrder()]).isSearchMatch()) {
+                        if (((DB_RecordCell) recordCellArray[rowCounter][Columns.FAMILY_KEY.getUniqueIndex()]).isSearchMatch()) {
                             return true;
                         }
                         return false;
@@ -355,6 +360,18 @@ public class JTableProspectiveStudents extends JTable {
                 if (fgColor != null) {
                     setForeground(fgColor);
                 }
+            }
+            //If it's a number, then center it
+            Columns colObj = getColFromHeader(column);
+            if (colObj != null
+                    && (colObj == Columns.GRADE
+                    || colObj == Columns.LOTTERY_DRAW
+                    || colObj == Columns.TIER
+                    || colObj == Columns.WAIT_LIST_SIBLINGS
+                    || colObj == Columns.OLD_TIER
+                    || colObj == Columns.NEW_TIER
+                    || colObj == Columns.DATA_ROW_NUM)) {
+                setHorizontalAlignment(CENTER);
             }
             return comp;
         }

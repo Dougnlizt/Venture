@@ -74,7 +74,7 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
 
         jTextPane1.setEditable(false);
         jTextPane1.setBorder(null);
-        jTextPane1.setText("The following records could not be imported.  Please check the spreadsheet data and adjust accordingly.");
+        jTextPane1.setText("The following records could not be imported, and will not be included in the lottery.  Please check the spreadsheet, adjust the data as needed, then re-import."); // NOI18N
         jTextPane1.setDragEnabled(false);
         jTextPane1.setFocusable(false);
         jTextPane1.setOpaque(false);
@@ -189,21 +189,22 @@ public class ImportIssuesDialog extends javax.swing.JDialog {
         JTableProspectiveStudents prospectiveStudentsTable;
         prospectiveStudentsTable = new JTableProspectiveStudents();
         prospectiveStudentsTable.setAllowClassColumnSorting(false);
-        String[] headerCols = new String[] {"Data Row #",
+        String[] headerCols = new String[] {Columns.DATA_ROW_NUM.getColumnName(),
                                             Columns.LAST_NAME.getColumnName(),
                                             Columns.FIRST_NAME.getColumnName(),
                                             Columns.TIER.getColumnName(),
                                             Columns.GRADE.getColumnName(),
                                             Columns.FAMILY_KEY.getColumnName(),
-                                            "Reason"};
+                                            Columns.IMPORT_ISSUE_REASON.getColumnName(),
+                                            };
 
         prospectiveStudentsTable.setTableHeaderRow(headerCols);
         
-        int lastNameColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.LAST_NAME);
-        int firstNameColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.FIRST_NAME);
-        int tierColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.TIER);
-        int gradeColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.GRADE);
-        int familyKeyColIndex = Utilities.Columns.getColumnIndex(Utilities.Columns.LAST_NAME);
+        int lastNameColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.LAST_NAME);
+        int firstNameColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.FIRST_NAME);
+        int tierColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.TIER);
+        int gradeColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.GRADE);
+        int familyKeyColIndex = Utilities.Columns.getColumnSpreadsheetIndex(Utilities.Columns.LAST_NAME);
         
         int rowCounter = 0;
         

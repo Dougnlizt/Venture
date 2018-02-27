@@ -101,7 +101,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="The following records could not be imported.  Please check the spreadsheet data and adjust accordingly."/>
+            <Property name="text" type="java.lang.String" value="The following records could not be imported, and will not be included in the lottery.  Please check the spreadsheet, adjust the data as needed, then re-import." noResource="true"/>
             <Property name="dragEnabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="opaque" type="boolean" value="false"/>
