@@ -8,6 +8,7 @@ package org.tjcs.venture;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -851,6 +852,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jMenuHelp.setText("Help");
 
         jMenuItemAbout.setText("About");
+        jMenuItemAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutActionPerformed(evt);
+            }
+        });
         jMenuHelp.add(jMenuItemAbout);
 
         jMenuBar1.add(jMenuHelp);
@@ -966,6 +972,17 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButtonExportSettingsActionPerformed
 
+    private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
+        About aboutDialog = new About(this, false);
+        aboutDialog.setAppName(PROGRAM_NAME);
+        aboutDialog.setDeveloper("Doug Thompson");
+        aboutDialog.setVersion(PROGRAM_VERSION);
+        aboutDialog.setLastUpdated("2/27/2018");
+        aboutDialog.setTJCS_Contact("Cathy Winwood");
+        aboutDialog.setLocationRelativeTo(this);
+        aboutDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItemAboutActionPerformed
+
     /**
      * @param args the command line argument
      */
@@ -1078,10 +1095,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     // End of variables declaration//GEN-END:variables
 
     private final String homeDir = System.getProperty("user.home");
-    private final String appName = "Venture";
+    private final String appName = "TJCS_Venture";
     private final String toolSettingsFileName = "ventureSettings.txt";
-    private final static String PROGRAM_NAME = "Venture";
-    private final static String PROGRAM_VERSION = "1.1.0";
+    private final static String PROGRAM_NAME = "TJCS Lottery";
+    private final static String PROGRAM_VERSION = "1.1.1";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
     private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
@@ -1186,12 +1203,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private void setImportSettings() {
         SpreadsheetImport importSettings = new SpreadsheetImport(this, true);
         importSettings.setLocationRelativeTo(this);
-//        importSettings.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosed(WindowEvent e) {
-//                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//            }
-//        });
         importSettings.setVisible(true);
     }
     
@@ -1378,7 +1389,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     }
                 }
                 for (ProspectiveStudent prospectiveStudent : tempList) {
-                    if (prospectiveStudent.getFamilyKey() == null) {
+                    if (prospectiveStudent.getFamilyKey() == null
+                            || prospectiveStudent.getFamilyKey().trim().isEmpty()) {
                         continue;
                     }
                     for (ProspectiveStudent potentialSibling : tempList) {
@@ -1454,7 +1466,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             sheet = wb.createSheet("Lottery Summary");
             int rowIndex = 0;
             row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue("Created By: TJCS '" + PROGRAM_NAME + "' Lottery Tool, Version " + PROGRAM_VERSION);
+            row.createCell(0).setCellValue("Created By: '" + PROGRAM_NAME + "' Tool, Version " + PROGRAM_VERSION);
 
             //String dateCreated = convertDateToString(LocalDateTime.now(), true);
             row = sheet.createRow(rowIndex++);
@@ -1574,33 +1586,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             }
                             objFormulaEvaluator.evaluate(cell);
                             String cellValue = dataFormatter.formatCellValue(cell, objFormulaEvaluator);
+                            sheet.setColumnHidden(colCount, true);
                             Cell targetCell = row.createCell(colCount ++);
                             targetCell.setCellValue(cellValue);
-                            colIndexWidthMap.put(colCount - 1, Math.max(colIndexWidthMap.get(colCount - 1), cellValue.length()));
-//                            targetCell.setCellComment(cell.getCellComment());
-//                            switch(cell.getCellTypeEnum()) {
-//                                case BLANK:
-//                                    break;
-//                                case BOOLEAN:
-//                                    targetCell.setCellValue(cell.getBooleanCellValue());
-//                                    break;
-//                                case ERROR:
-//                                    targetCell.setCellValue(cell.getErrorCellString());
-//                                    break;
-//                                case FORMULA:
-//                                    targetCell.setCellValue(cell.getCellFormula());
-//                                    break;
-//                                case NUMERIC:
-//                                    targetCell.setCellValue(cell.getNumericCellValue());
-//                                    break;
-//                                case STRING:
-//                                    targetCell.setCellValue(cell.getStringCellValue());                                    
-//                                    break;
-//                                default:
-//                                    targetCell.setCellValue(cell.getRawValue());
-//                                    break;
-//                            }
-//                            colIndexWidthMap.put(colCount - 1, cell.getStringCellValue().length());
+                            colIndexWidthMap.put(colCount - 1, Math.max(colIndexWidthMap.get(colCount - 1), cellValue.length()));                            
                         }
                         row.createCell(colCount, CellType.BLANK);
                     }
@@ -1632,6 +1621,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             lotteryExported = true;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Export complete at\n\n" + file.toString(), "Export Complete", JOptionPane.INFORMATION_MESSAGE);
+            //Runtime.getRuntime().exec(file.toString());
+            Desktop.getDesktop().open(file);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Problem exporting the file: " + ex.getMessage(), "Problem Writing the File", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
