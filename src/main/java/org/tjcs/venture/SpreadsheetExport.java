@@ -175,7 +175,7 @@ public class SpreadsheetExport extends javax.swing.JDialog {
     private Map<String, Integer> headerIndexMap;
     
     private void initMyComponents() {
-        this.setTitle("Spreadsheet Import Settings");
+        this.setTitle("Spreadsheet Export Settings");
         initColumnFields();
     }
     

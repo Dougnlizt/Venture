@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -976,8 +977,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         aboutDialog.setAppName(PROGRAM_NAME);
         aboutDialog.setDeveloper("Doug Thompson");
         aboutDialog.setVersion(PROGRAM_VERSION);
-        aboutDialog.setLastUpdated("2/27/2018");
+        aboutDialog.setLastUpdated(PROGRAM_VERSION_DATE);
         aboutDialog.setTJCS_Contact("Cathy Winwood");
+        aboutDialog.setWebsite("Program Site", "https://github.com/Dougnlizt/Venture");
         aboutDialog.setLocationRelativeTo(this);
         aboutDialog.setVisible(true);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
@@ -1098,6 +1100,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final String toolSettingsFileName = "ventureSettings.txt";
     private final static String PROGRAM_NAME = "TJCS Lottery";
     private final static String PROGRAM_VERSION = "1.2.0";
+    private final static String PROGRAM_VERSION_DATE = "3/3/2018";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
     private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
@@ -1170,6 +1173,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         gradeAvailableSeatsMap.put(Grade.SECOND, jTextField2nd);
         gradeAvailableSeatsMap.put(Grade.FIRST, jTextField1st);
         gradeAvailableSeatsMap.put(Grade.KINDER, jTextFieldKinder);
+        
+        jLabelNumRecords.setFont(new Font(jLabelNumRecords.getFont().getFontName(),
+                Font.BOLD,
+                jLabelNumRecords.getFont().getSize() + 2));
+        jLabelNumRecords.setForeground(new java.awt.Color(0, 153, 51));
+        jLabelNumRecords.setToolTipText(null);
+        
+        jButtonStartLottery.setForeground(new java.awt.Color(200, 200, 200));
         
         loadSettings();
         
@@ -1404,6 +1415,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             rePopulateProspectiveStudents();
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             jButtonStartLottery.setEnabled(true);
+            jButtonStartLottery.setForeground(new java.awt.Color(0, 153, 51));
             jButtonExportSettings.setEnabled(true);
             jButtonExport.setEnabled(false);
         } catch (Exception ex) {
@@ -1987,7 +1999,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
             if (!newTierList.isEmpty()) {
-                SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(null, true);
+                SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(lotteryFrame, true);
                 siblingsUpdateDialog.setTierChangeList(newTierList);
                 siblingsUpdateDialog.buildTable();
                 siblingsUpdateDialog.setLocationRelativeTo(lotteryFrame);
@@ -2293,14 +2305,14 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }
     
     /**
-     *In order to get the option fuse dialog to show when activating the tool,
+     *In order to get the dialog to show when activating the tool,
      *it needs to be made visible.  However, the main frame should be
-     *shown on top.  When making the option fuse dialog visible, it wants
+     *shown on top.  When making the dialog visible, it wants
      *to bring it to the front, whereas we only want it to show one layer
-     *below the main frame.  We also only want to do this if the option
+     *below the main frame.  We also only want to do this if the
      *dialog is visible in the first place.  The 'timestamp' portion avoids
      *the same commands being hit multiple times by multiple event calls.
-     *To avoid a 'blinking' effect by showing the option dialog then bringing
+     *To avoid a 'blinking' effect by showing the dialog then bringing
      *the main frame back to the front, temporarily setting the main frame
      *to always be on top helps to minimize (not eliminate) this undesired
      *effect.
