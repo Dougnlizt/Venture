@@ -886,7 +886,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_jButtonBrowseForMasterFileActionPerformed
 
     private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
-        continueLoad = true;
         loadSpreadsheet();
     }//GEN-LAST:event_jButtonImportActionPerformed
 
@@ -1098,7 +1097,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final String appName = "TJCS_Venture";
     private final String toolSettingsFileName = "ventureSettings.txt";
     private final static String PROGRAM_NAME = "TJCS Lottery";
-    private final static String PROGRAM_VERSION = "1.1.1";
+    private final static String PROGRAM_VERSION = "1.2.0";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
     private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
@@ -1106,14 +1105,15 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final static String GRADES_OPEN_SEATS = "Grades Open Seats";
     private final static String SPREADSHEET_COLUMNS = "Spreadsheet Columns";
     private final static String SPREADSHEET_EXPORT_COLUMNS = "Spreadsheet Export Columns";
+    private final static String SPREADSHEET_OPEN_ON_EXPORT = "Open Spreadsheet After Export";
     private List<DB_RecordCell> dbRecordCellList;
     private List<Lottery> lotteryList;
     private Map<Grade, Lottery> gradeLotteryMap = new HashMap<>();
     //private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
     private Map<Grade, JCheckBox> gradeCheckBoxesMap;
     private Map<Grade, JTextField> gradeAvailableSeatsMap;
-    private boolean continueLoad = false;
-    private ImageIcon lotteryIcon = new ImageIcon(getClass().getClassLoader().getResource("images/lottery.png"));
+    private boolean openSpreadsheet = true;
+    private ImageIcon lotteryIcon = new ImageIcon(getClass().getClassLoader().getResource("images/letter-l-48.png"));
     private long timeStamp = System.currentTimeMillis();
     private List<XSSFRow> problemRows;
     private Map<XSSFRow, String> problemRowsMap;
@@ -1196,10 +1196,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }
 
-    public void setContinueLoad(boolean continueLoad) {
-        this.continueLoad = continueLoad;
-    }
-    
     private void setImportSettings() {
         SpreadsheetImport importSettings = new SpreadsheetImport(this, true);
         importSettings.setLocationRelativeTo(this);
@@ -1620,9 +1616,23 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             fop.close();
             lotteryExported = true;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            JOptionPane.showMessageDialog(this, "Export complete at\n\n" + file.toString(), "Export Complete", JOptionPane.INFORMATION_MESSAGE);
-            //Runtime.getRuntime().exec(file.toString());
-            Desktop.getDesktop().open(file);
+            //JOptionPane.showMessageDialog(this, "Export complete at\n\n" + file.toString(), "Export Complete", JOptionPane.INFORMATION_MESSAGE);
+            
+            JCheckBox checkbox = new JCheckBox("Open the results spreadsheet");
+            checkbox.setSelected(openSpreadsheet);
+            String message = "Export complete at\n\n" + file.toString() + "\n\n";
+            Object[] params = {message, checkbox};
+            JOptionPane.showMessageDialog(this, params, "Export Complete", JOptionPane.INFORMATION_MESSAGE);
+            openSpreadsheet = checkbox.isSelected();
+            if (openSpreadsheet) {
+                try {
+                    Desktop.getDesktop().open(file);
+                } catch (Exception openFileEx) {
+                    JOptionPane.showMessageDialog(this, "Problem opening the spreadsheet: " + openFileEx.getMessage(), "Problem Opening the File", JOptionPane.ERROR_MESSAGE);
+                    openFileEx.printStackTrace();
+                }
+            }
+            saveSettings();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Problem exporting the file: " + ex.getMessage(), "Problem Writing the File", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -2182,6 +2192,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                             }
                         }
                         break;
+                    case SPREADSHEET_OPEN_ON_EXPORT:
+                        openSpreadsheet = Boolean.valueOf((String) temp);
                     default:
                         break;
                 }
@@ -2232,6 +2244,11 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             stringToWrite.append(String.valueOf(colIndex)).append(",");
         }
         stringToWrite.append("\n");
+        
+        stringToWrite.append(SPREADSHEET_OPEN_ON_EXPORT).append("~");
+        stringToWrite.append(String.valueOf(openSpreadsheet));
+        stringToWrite.append("\n");
+        
         
         Path fileDest = Paths.get(homeDir, appName, toolSettingsFileName);
         try {
