@@ -32,6 +32,7 @@ public class Utilities {
 //    public static Color DARK_GREEN_COLOR = new Color(0x0E, 0x3A, 0xE2);
     //public static Color DARK_GREEN_COLOR = new Color(0x00, 0x00, 0x00);
     public static Color BLACK_COLOR = new Color(0x00, 0x00, 0x00);
+    public static Color YELLOW_COLOR = Color.YELLOW;
     public static String EMPTY_LOTTERY_DRAW_NUMBER = "-----";
     public static List<String> charactersArray = new ArrayList<>();
     static {
@@ -420,20 +421,43 @@ public class Utilities {
     
     public static List<String> getSpreadsheetColumnLetters() {
         return charactersArray;
-//        int asciA_StartsAt = 65;
-//        List<String> charactersArray = new ArrayList<>();
-//        for (int i = 0; i < 26; i ++) {
-//            String character = String.valueOf((char) (asciA_StartsAt + i));
-//            charactersArray.add(character);
-//        }
-//        for (int i = 0; i < 26; i ++) {
-//            String firstCharacter = String.valueOf((char) (asciA_StartsAt + i));
-//            for (int j = 0; j < 26; j ++) {
-//                String secondCharacter = String.valueOf((char) (asciA_StartsAt + j));
-//                charactersArray.add(firstCharacter + secondCharacter);
-//            }
-//        }
-//        return charactersArray;
     }
     
+    public static String getProspectiveStudentsAsString(List<ProspectiveStudent> prospectiveStudents) {
+        return getProspectiveStudentsAsString(prospectiveStudents, false);
+    }
+    
+    public static String getProspectiveStudentsAsString(List<ProspectiveStudent> prospectiveStudents, boolean includePreviousTier) {
+        StringBuilder sb = new StringBuilder("");
+        sb.append(Columns.LAST_NAME.getColumnName()).append(",")
+                .append(Columns.FIRST_NAME.getColumnName()).append(",")
+                .append(Columns.GRADE.getColumnName()).append(",");
+        if (includePreviousTier) {
+            sb.append(Columns.OLD_TIER.getColumnName()).append(",")
+                    .append(Columns.NEW_TIER.getColumnName()).append(",");
+        } else {
+            sb.append(Columns.TIER.getColumnName()).append(",");
+        }
+        sb.append(Columns.FAMILY_KEY.getColumnName()).append("\n");
+        for (ProspectiveStudent prospectiveStudent : prospectiveStudents) {
+            //Create a new comma delimited row for each prospective student with the data accordingly
+            sb.append(prospectiveStudent.getLastName()).append(",")
+                    .append(prospectiveStudent.getFirstName()).append(",")
+                    .append(prospectiveStudent.getGrade().number).append(",");
+            if (includePreviousTier) {
+                sb.append(prospectiveStudent.getOldTier().getNumber()).append(",");                
+            }
+            sb.append(prospectiveStudent.getTier().getNumber()).append(",");
+            sb.append(prospectiveStudent.getFamilyKey()).append("\n");
+        }
+        return sb.toString();
+    }
+    
+    public static boolean isDevelopment() {
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        if (currentPath.resolve("target").resolve("test-classes").toFile().exists()) {
+            return true;
+        }
+        return false;
+    }
 }

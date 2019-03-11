@@ -43,6 +43,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import org.apache.poi.ss.usermodel.Cell;
@@ -53,7 +54,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -141,6 +141,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabelNumRecords = new javax.swing.JLabel();
+        jLabelStudentTierChangesList = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButtonImportSettings = new javax.swing.JButton();
@@ -642,7 +643,6 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         ));
         jScrollPaneProspectiveStudents.setViewportView(jTablePropsectiveStudents);
 
-        jTextFieldFilterStudents.setToolTipText("");
         jTextFieldFilterStudents.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldFilterStudentsKeyReleased(evt);
@@ -656,6 +656,22 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jLabelNumRecords.setText("N/A");
         jLabelNumRecords.setToolTipText("");
 
+        jLabelStudentTierChangesList.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        jLabelStudentTierChangesList.setForeground(new java.awt.Color(0, 51, 255));
+        jLabelStudentTierChangesList.setText("<html><u>Student Tier Changes List</u></html>"); // NOI18N
+        jLabelStudentTierChangesList.setToolTipText("Show the list of those with tier changes"); // NOI18N
+        jLabelStudentTierChangesList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelStudentTierChangesListMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabelStudentTierChangesListMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabelStudentTierChangesListMouseEntered(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -668,8 +684,10 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel22)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelNumRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(131, 131, 131)
+                        .addComponent(jLabelNumRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelStudentTierChangesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(159, 159, 159)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldFilterStudents)))
@@ -694,7 +712,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jTextFieldFilterStudents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21)
                     .addComponent(jLabel22)
-                    .addComponent(jLabelNumRecords))
+                    .addComponent(jLabelNumRecords)
+                    .addComponent(jLabelStudentTierChangesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneProspectiveStudents, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                 .addContainerGap())
@@ -984,6 +1003,18 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         aboutDialog.setVisible(true);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
+    private void jLabelStudentTierChangesListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelStudentTierChangesListMouseClicked
+        showSiblingsUpdatedDialog(null);
+    }//GEN-LAST:event_jLabelStudentTierChangesListMouseClicked
+
+    private void jLabelStudentTierChangesListMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelStudentTierChangesListMouseExited
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabelStudentTierChangesListMouseExited
+
+    private void jLabelStudentTierChangesListMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelStudentTierChangesListMouseEntered
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabelStudentTierChangesListMouseEntered
+
     /**
      * @param args the command line argument
      */
@@ -1066,6 +1097,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabelImportIssues;
     private javax.swing.JLabel jLabelNumRecords;
     private javax.swing.JLabel jLabelSelectAllGrades;
+    private javax.swing.JLabel jLabelStudentTierChangesList;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
@@ -1115,6 +1147,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     //private final String[] headerCols = {"Lottery Draw", "Last Name", "First Name", "Tier", "Grade", "Family Key", "Wait List Siblings"};
     private Map<Grade, JCheckBox> gradeCheckBoxesMap;
     private Map<Grade, JTextField> gradeAvailableSeatsMap;
+    private Map<Grade, JLabel> gradeCheckBoxLabel;
     private boolean openSpreadsheet = true;
     private ImageIcon lotteryIcon = new ImageIcon(getClass().getClassLoader().getResource("images/letter-l-48.png"));
     private long timeStamp = System.currentTimeMillis();
@@ -1128,6 +1161,9 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private boolean allGradesComplete = false;
     private Map<Integer, String> extraColumns;
     private List<Integer> extraColumnsToInclude = new ArrayList<>();
+    private Color defaultBackgroundLabelColor = null;
+    private Font defaultLabelFont = null;
+    private Font italicsLabelFont = null;
     
     /**
      * Need to provide credits for the icon:
@@ -1174,6 +1210,24 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         gradeAvailableSeatsMap.put(Grade.FIRST, jTextField1st);
         gradeAvailableSeatsMap.put(Grade.KINDER, jTextFieldKinder);
         
+        gradeCheckBoxLabel = new HashMap<>();
+        gradeCheckBoxLabel.put(Grade.TWELFTH, jLabel7);
+        gradeCheckBoxLabel.put(Grade.ELEVENTH, jLabel5);
+        gradeCheckBoxLabel.put(Grade.TENTH, jLabel8);
+        gradeCheckBoxLabel.put(Grade.NINTH, jLabel9);
+        gradeCheckBoxLabel.put(Grade.EIGHTH, jLabel10);
+        gradeCheckBoxLabel.put(Grade.SEVENTH, jLabel11);
+        gradeCheckBoxLabel.put(Grade.SIXTH, jLabel12);
+        gradeCheckBoxLabel.put(Grade.FIFTH, jLabel13);
+        gradeCheckBoxLabel.put(Grade.FOURTH, jLabel14);
+        gradeCheckBoxLabel.put(Grade.THIRD, jLabel15);
+        gradeCheckBoxLabel.put(Grade.SECOND, jLabel16);
+        gradeCheckBoxLabel.put(Grade.FIRST, jLabel17);
+        gradeCheckBoxLabel.put(Grade.KINDER, jLabel18);
+        defaultBackgroundLabelColor = jLabel18.getBackground();
+        defaultLabelFont = jLabel18.getFont();
+        italicsLabelFont = new Font(defaultLabelFont.getFontName(), Font.ITALIC, defaultLabelFont.getSize());
+        
         jLabelNumRecords.setFont(new Font(jLabelNumRecords.getFont().getFontName(),
                 Font.BOLD,
                 jLabelNumRecords.getFont().getSize() + 2));
@@ -1189,6 +1243,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         jButtonStartLottery.setEnabled(false);
         jButtonExport.setEnabled(false);
         jButtonExportSettings.setEnabled(false);
+        jLabelStudentTierChangesList.setVisible(false);
     }
     
     private void selectSourceFile() {
@@ -1231,17 +1286,42 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     }
     
     private void loadSpreadsheet() {
+        boolean keepCurrentLotteryResults = false;
+        List<Grade> gradesToKeep = new ArrayList<>();
+        jLabelStudentTierChangesList.setVisible(false);
         if (lotteryStarted) {
-            int wannaContinue = -1;
-            if (lotteryExported) {
-                wannaContinue = JOptionPane.showConfirmDialog(this, "The lottery results have been saved, but any existing lottery information shown here will be lost.\n\nAre you "
-                        + "sure you want to reload the prospective student data from the spreadsheet?", "Reload Spreadsheet", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            } else {
-                wannaContinue = JOptionPane.showConfirmDialog(this, "Results not saved!!  Are you sure you want to reload the data\n\nand "
-                        + "lose all lottery data?", "Reload Spreadsheet", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            List<String> gradesToRetain = new ArrayList<>();
+            for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                Grade grade = entry.getKey();
+                if (grade.isLotteryComplete()) {
+                    gradesToKeep.add(grade);
+                    gradesToRetain.add(grade.getGradeDescription());
+                }
             }
+            
+            JCheckBox checkBoxKeepLotteryResults = new JCheckBox("Keep the Current Lottery and Tier Change Results for the "
+                    + String.join(", ", gradesToRetain) + (gradesToRetain.size() == 1 ? " Grade" : " Grades") + "?", true);
+            checkBoxKeepLotteryResults.setToolTipText("<html>When importing, do not overwrite any prospective students<br/>that have already"
+                    + " gone through the lottery or had a tier change</html>");
+            
+            String message;
+
+            if (lotteryExported) {
+                message = "The lottery results have been saved, but any existing lottery information shown here will be lost\n"
+                        + "unless you check the box below.\n\nAre you sure you want to reload the prospective student data from the spreadsheet?\n\n";
+            } else {
+                message = "Results not saved!!  Any existing lottery information shown here will be lost\n"
+                        + "unless you check the box below.\n\nAre you sure you want to reload the data\nand "
+                        + "lose all lottery data (if the checkbox below is not selected)?\n\n";
+            }
+            Object[] params = {message, checkBoxKeepLotteryResults};
+            int wannaContinue = JOptionPane.showConfirmDialog(this, params, "Reload Spreadsheet", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (wannaContinue != JOptionPane.YES_OPTION) {
                 return;
+            }
+            keepCurrentLotteryResults = checkBoxKeepLotteryResults.isSelected();
+            if (keepCurrentLotteryResults) {
+                //Need to get rid of the grade lottery map items that need to be reloaded...???  No, not necessarily... because of potential tier changes that happened.
             }
         }
         
@@ -1256,11 +1336,28 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
                 
         lotteryExported = false;
-        lotteryStarted = false;
+        lotteryStarted = (keepCurrentLotteryResults && lotteryStarted);
         allGradesComplete = false;
         jLabelImportIssues.setVisible(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        gradeLotteryMap = new TreeMap<>();
+        List<ProspectiveStudent> prospectiveStudentsWithTierChanges = new ArrayList<>();
+        if (lotteryStarted) {
+            //Remove the grades from the map that are not being retained if they are in the map.
+            for (Grade grade : Grade.values()) {
+                if (gradesToKeep.contains(grade)
+                        || gradeLotteryMap.get(grade) == null) continue;
+                
+                for (ProspectiveStudent ps : gradeLotteryMap.get(grade).getAllStudents()) {
+                    if (ps.isChangeInTier()) {
+                        prospectiveStudentsWithTierChanges.add(ps);
+                    }
+                }
+                gradeLotteryMap.remove(grade);
+            }
+            jLabelStudentTierChangesList.setVisible(!prospectiveStudentsWithTierChanges.isEmpty());
+        } else {
+            gradeLotteryMap = new TreeMap<>();
+        }
         List<XSSFRow> validRows = new ArrayList<>();
         problemRows = new ArrayList<>();
         problemRowsMap = new TreeMap<>();
@@ -1381,13 +1478,28 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                 Tier.getTier((int) row.getCell(tierColIndex).getNumericCellValue()),
                                 row.getCell(familyKeyColIndex).getStringCellValue(),
                                 Grade.getGrade((int) row.getCell(gradeColIndex).getNumericCellValue()));
+                    if (keepCurrentLotteryResults) {
+                        if (gradesToKeep.contains(prospectiveStudent.getGrade())) {
+                            continue;
+                        }
+                        //See if the existing matching prospective student had a tier change...
+                        for (ProspectiveStudent prospectiveStudentsWithTierChange : prospectiveStudentsWithTierChanges) {
+                            if (prospectiveStudentsWithTierChange.compareTo(prospectiveStudent) == 0) {
+                                prospectiveStudent = prospectiveStudentsWithTierChange;
+                                break;
+                            }
+                        }
+                    }
                     addToLottery(prospectiveStudent);
                 }
                 //Need to set the siblings based on the family key
                 List<ProspectiveStudent> tempList = new ArrayList<>();
                 for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
                     Grade grade = entry.getKey();
-                    grade.setLotteryComplete(false);
+                    if (!keepCurrentLotteryResults
+                            || !gradesToKeep.contains(grade)) {
+                        grade.setLotteryComplete(false);
+                    }
                     Lottery value = entry.getValue();
                     Map<Tier, List<ProspectiveStudent>> prospectiveStudentsTierMap = value.getTierPS_List();
                     for (Tier tier : Tier.values()) {
@@ -1497,7 +1609,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                 totalOpenSeats += lottery.getOpenSeats();
                 totalProspectiveStudents += numStudents;
                 for (ProspectiveStudent allStudent : lottery.getAllStudents()) {
-                    if (allStudent.getOldTier() != null) {
+                    if (allStudent.isChangeInTier()) {
                         studentTiersUpgraded.add(allStudent);
                     }
                 }
@@ -1983,6 +2095,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
                                             && sibling.getGrade().getNumber() < grade.getNumber()) {
                                         sibling.setOldTier(sibling.getTier());
                                         sibling.setTier(newTier);
+                                        sibling.setChangeInTier(true);
                                         newTierList.add(sibling);
                                     } else if (newTier.getNumber() > sibling.getTier().getNumber()) {
                                         //DT:  This shouldn't happen...
@@ -1999,6 +2112,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             updateCheckboxBackgrounds();
             rePopulateProspectiveStudents();
             if (!newTierList.isEmpty()) {
+                jLabelStudentTierChangesList.setVisible(true);
                 SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(lotteryFrame, true);
                 siblingsUpdateDialog.setTierChangeList(newTierList);
                 siblingsUpdateDialog.buildTable();
@@ -2022,6 +2136,26 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
         }
     }
     
+    private void showSiblingsUpdatedDialog(List<ProspectiveStudent> studentsList) {
+        if (studentsList == null) {
+            studentsList = new ArrayList<>();
+            for (Map.Entry<Grade, Lottery> entry : gradeLotteryMap.entrySet()) {
+                //Grade grade = entry.getKey();
+                Lottery lottery = entry.getValue();
+                for (ProspectiveStudent ps : lottery.getAllStudents()) {
+                    if (ps.isChangeInTier()) {
+                        studentsList.add(ps);
+                    }
+                }
+            }
+        }
+        SiblingsUpdatedDialog siblingsUpdateDialog = new SiblingsUpdatedDialog(this, true);
+        siblingsUpdateDialog.setTierChangeList(studentsList);
+        siblingsUpdateDialog.buildTable();
+        siblingsUpdateDialog.setLocationRelativeTo(this);
+        siblingsUpdateDialog.setVisible(true);
+    }
+    
     private void updateCheckboxBackgrounds() {
         for (Map.Entry<Grade, JCheckBox> entry : gradeCheckBoxesMap.entrySet()) {
             Grade grade = entry.getKey();
@@ -2033,6 +2167,17 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             } else {
                 checkboxObj.setBackground(new Color(0xCC, 0xD0, 0xD8));
                 checkboxObj.setOpaque(true);
+            }
+        }
+        for (Map.Entry<Grade, JLabel> entry : gradeCheckBoxLabel.entrySet()) {
+            Grade grade = entry.getKey();
+            JLabel labelObj = entry.getValue();
+            if (grade.isLotteryComplete()) {
+                labelObj.setFont(italicsLabelFont);
+                //labelObj.setBackground(Utilities.YELLOW_COLOR);
+            } else {
+                labelObj.setFont(defaultLabelFont);
+                //labelObj.setBackground(defaultBackgroundLabelColor);
             }
         }
     }

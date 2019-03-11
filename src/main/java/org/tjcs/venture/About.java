@@ -8,6 +8,8 @@ package org.tjcs.venture;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -66,7 +68,19 @@ public class About extends javax.swing.JDialog {
 
         jLabelAppName.setText("Name");
 
+        jLabelVersion.setForeground(new java.awt.Color(0, 0, 255));
         jLabelVersion.setText("Version");
+        jLabelVersion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelVersionMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabelVersionMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabelVersionMouseEntered(evt);
+            }
+        });
 
         jLabelLastUpdated.setText("Date");
 
@@ -170,6 +184,28 @@ public class About extends javax.swing.JDialog {
     private void jLabelWebSiteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelWebSiteMouseExited
         jLabelWebSite.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jLabelWebSiteMouseExited
+
+    private void jLabelVersionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelVersionMouseClicked
+        try {
+            Desktop desktop = java.awt.Desktop.getDesktop();
+            Path path = FileSystems.getDefault().getPath("ChangeHistory.html");
+            if (Utilities.isDevelopment()) {
+                path = FileSystems.getDefault().getPath("src", "main", "java", "ChangeHistory.html").toAbsolutePath();
+            }
+            desktop.browse(path.toUri());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Unable to open the change history",
+                    "Cannot Open Change History", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jLabelVersionMouseClicked
+
+    private void jLabelVersionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelVersionMouseEntered
+        jLabelVersion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabelVersionMouseEntered
+
+    private void jLabelVersionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelVersionMouseExited
+        jLabelVersion.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_jLabelVersionMouseExited
 
     /**
      * @param args the command line arguments

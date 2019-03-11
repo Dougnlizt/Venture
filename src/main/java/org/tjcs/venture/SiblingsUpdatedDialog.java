@@ -6,6 +6,10 @@
 package org.tjcs.venture;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,15 +39,16 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPaneInvalidRecords = new javax.swing.JScrollPane();
-        jTableInvalidRecords = new javax.swing.JTable();
+        jScrollPaneTierChange = new javax.swing.JScrollPane();
+        jTableTierChange = new javax.swing.JTable();
         jButtonOK = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPaneDescription = new javax.swing.JTextPane();
+        jButtonOKCopyTable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTableInvalidRecords.setModel(new javax.swing.table.DefaultTableModel(
+        jTableTierChange.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -54,7 +59,7 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPaneInvalidRecords.setViewportView(jTableInvalidRecords);
+        jScrollPaneTierChange.setViewportView(jTableTierChange);
 
         jButtonOK.setText("Close");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
@@ -76,6 +81,13 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         jTextPaneDescription.setRequestFocusEnabled(false);
         jScrollPane2.setViewportView(jTextPaneDescription);
 
+        jButtonOKCopyTable.setText("Copy To Clipboard");
+        jButtonOKCopyTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOKCopyTableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,9 +95,11 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPaneTierChange, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonOKCopyTable)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonOK))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE))
                 .addContainerGap())
@@ -96,9 +110,11 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneInvalidRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                .addComponent(jScrollPaneTierChange, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOK)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonOK)
+                    .addComponent(jButtonOKCopyTable))
                 .addContainerGap())
         );
 
@@ -108,6 +124,13 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonOKActionPerformed
+
+    private void jButtonOKCopyTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKCopyTableActionPerformed
+        //Copy the table data to the system clipboard
+        StringSelection stringSelection = new StringSelection(Utilities.getProspectiveStudentsAsString(tierChangeList, true));        
+        Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clpbrd.setContents(stringSelection, null);
+    }//GEN-LAST:event_jButtonOKCopyTableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,9 +177,10 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonOK;
+    private javax.swing.JButton jButtonOKCopyTable;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPaneInvalidRecords;
-    private javax.swing.JTable jTableInvalidRecords;
+    private javax.swing.JScrollPane jScrollPaneTierChange;
+    private javax.swing.JTable jTableTierChange;
     private javax.swing.JTextPane jTextPaneDescription;
     // End of variables declaration//GEN-END:variables
     
@@ -232,10 +256,10 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         prospectiveStudentsTable.initTable();
         prospectiveStudentsTable.applyFilter(null, false);
         if (tierChangeList.isEmpty()) {
-            jScrollPaneInvalidRecords.setVisible(false);
+            jScrollPaneTierChange.setVisible(false);
             jTextPaneDescription.setText("No Siblings Updated");
         } else {
-            jScrollPaneInvalidRecords.setViewportView(prospectiveStudentsTable);
+            jScrollPaneTierChange.setViewportView(prospectiveStudentsTable);
         }
     }
     
@@ -244,4 +268,11 @@ public class SiblingsUpdatedDialog extends javax.swing.JDialog {
         super.dispose();
     }
     
+    private JTableProspectiveStudents getProspectiveStudentsTable() {
+        Component tableComp = jScrollPaneTierChange.getViewport().getView();
+        if (tableComp instanceof JTableProspectiveStudents) {
+            return (JTableProspectiveStudents) tableComp;
+        }
+        return null;
+    }
 }
