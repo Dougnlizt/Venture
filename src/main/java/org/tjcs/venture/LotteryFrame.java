@@ -1131,8 +1131,8 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
     private final String appName = "TJCS_Venture";
     private final String toolSettingsFileName = "ventureSettings.txt";
     private final static String PROGRAM_NAME = "TJCS Lottery";
-    private final static String PROGRAM_VERSION = "1.2.0";
-    private final static String PROGRAM_VERSION_DATE = "3/3/2018";
+    private final static String PROGRAM_VERSION = "1.3.0";
+    private final static String PROGRAM_VERSION_DATE = "3/11/2019";
     private final static String SOURCE_LOCATION_DESC = "Source Location";
     private final static String COLUMN_ASSIGNMENT = "Column Assignment";
     private final static String DESTINATION_LOCATION_DESC = "Destination Location";
