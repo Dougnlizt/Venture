@@ -186,15 +186,19 @@ public class About extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabelWebSiteMouseExited
 
     private void jLabelVersionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelVersionMouseClicked
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        if (path.getNameCount() > 3) {
+            //The tool, by default, is launched from the java bin directory, which is 3 dirs deep from the root.
+            path = path.getParent().getParent().getParent().resolve("ChangeHistory.html").toAbsolutePath();
+        }
         try {
-            Desktop desktop = java.awt.Desktop.getDesktop();
-            Path path = FileSystems.getDefault().getPath("ChangeHistory.html");
+            Desktop desktop = java.awt.Desktop.getDesktop();           
             if (Utilities.isDevelopment()) {
                 path = FileSystems.getDefault().getPath("src", "main", "java", "ChangeHistory.html").toAbsolutePath();
             }
             desktop.browse(path.toUri());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Unable to open the change history",
+            JOptionPane.showMessageDialog(this, "Unable to open the change history: " + e.getMessage(),
                     "Cannot Open Change History", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jLabelVersionMouseClicked
