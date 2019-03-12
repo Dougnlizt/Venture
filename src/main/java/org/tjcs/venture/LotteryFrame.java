@@ -1529,7 +1529,7 @@ public class LotteryFrame extends javax.swing.JFrame implements ActionListener {
             jButtonStartLottery.setEnabled(true);
             jButtonStartLottery.setForeground(new java.awt.Color(0, 153, 51));
             jButtonExportSettings.setEnabled(true);
-            jButtonExport.setEnabled(false);
+            jButtonExport.setEnabled(lotteryStarted);
         } catch (Exception ex) {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Problem loading the file:  " + ex.getMessage(), 
